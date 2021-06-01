@@ -7,7 +7,7 @@ class Say(commands.Cog):
 
     @commands.command()
     async def say(self, ctx, *, suffix):
-        ctx.send(f'{suffix}')
+        await ctx.send(f'{suffix}')
 
 def setup(client):
     client.add_cog(Say(client))
