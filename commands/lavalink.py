@@ -1,4 +1,5 @@
 import discord, lavalink, re
+from discord import channel
 from discord.ext import commands
 from configparser import ConfigParser
 
@@ -52,7 +53,7 @@ class Lavalink(commands.Cog):
                 raise commands.CommandInvokeError('I need the "CONNECT" and "SPEAK" permissions.')
             
             player.store('channel', ctx.channel.id)
-            await ctx.guild.change_voice_state(channel=ctx.author.voice.channel)
+            await self.connect_to(ctx.guild.id, str(ctx.author.voice.channel.id))
         else:
             if int(player.channel_id) != ctx.author.voice.channel.id:
                 raise commands.CommandInvokeError('You\'re not in the correct voice channel!')
@@ -62,6 +63,14 @@ class Lavalink(commands.Cog):
             guild_id = int(event.player.guild_id)
             guild = self.client.get_guild(guild_id)
             await guild.change_voice_state(channel=None)
+    
+    async def connect_to(self, guild_id: int, channel_id: str):
+        ws = self.client._connection._get_websocket(guild_id)
+        await ws.voice_state(
+            str(guild_id),
+            channel_id,
+            self_deaf = True
+        )
     
     @commands.command()
     async def play(self, ctx, *, query: str):
@@ -159,6 +168,18 @@ class Lavalink(commands.Cog):
             await player.skip()
         else:
             await ctx.send("There's No Song In The Queue For Me To Skip.")
+    
+    @commands.command()
+    async def disconnect(self, ctx):
+        player = self.client.lavalink.player_manager.get(ctx.guild.id)
+
+        if not player.is_connected:
+            await ctx.send("Not connected.")
+        else:
+            player.queue.clear()
+            await player.stop()
+            await self.connect_to(ctx.guild.id, None)
+            await ctx.send("Disconnected.")
 
 def setup(client):
     client.add_cog(Lavalink(client))
