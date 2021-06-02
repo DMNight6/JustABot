@@ -31,9 +31,9 @@ class Lavalink(commands.Cog):
         
         return guild_check
 
-    #async def cog_command_error(self, ctx, error):
-    #    if isinstance(error, commands.CommandInvokeError):
-    #        await ctx.send(error.original)
+    async def cog_command_error(self, ctx, error):
+        if isinstance(error, commands.CommandInvokeError):
+            await ctx.send(error.original)
     
     async def ensure_voice(self, ctx):
         player = self.client.lavalink.player_manager.create(ctx.guild.id, endpoint=str(ctx.guild.region))
