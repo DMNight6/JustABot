@@ -30,9 +30,9 @@ class Lavalink(commands.Cog):
         
         return guild_check
 
-    async def cog_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandInvokeError):
-            await ctx.send(error.original)
+    #async def cog_command_error(self, ctx, error):
+    #    if isinstance(error, commands.CommandInvokeError):
+    #        await ctx.send(error.original)
     
     async def ensure_voice(self, ctx):
         player = self.client.lavalink.player_manager.create(ctx.guild.id, endpoint=str(ctx.guild.region))
@@ -98,6 +98,67 @@ class Lavalink(commands.Cog):
 
         if not player.is_playing:
             await player.play()
+
+    @commands.command()
+    async def search(self, ctx, *, query: str):
+        player = self.client.lavalink.player_manager.get(ctx.guild.id)
+        query = query.strip('<>')
+
+        if url.match(query):
+            return await ctx.send("You used the wrong command for this.")
+        else:
+            query = f"ytsearch:{query}"
+        
+        results = await player.node.get_tracks(query)
+
+        if not results or not results['tracks']:
+            await ctx.send("Nothing Found. Try again.")
+
+        query_embed = discord.Embed(color=discord.Color.dark_blue())
+        
+        tracks = results['tracks'][0:10]
+        i = 0
+        query_result = ''
+        for track in tracks:
+            i = i + 1
+            query_result = query_result + f'{i} • [{track["info"]["title"]}]({track["info"]["uri"]})\n'
+
+        query_embed.description = query_result
+        await ctx.send(embed=query_embed)
+
+        def check(message):
+            return ctx.author == message.author
+        
+        responses = await self.client.wait_for('message', check=check, timeout=20)
+        if responses.content in ['cancel', 'c']:
+            return await ctx.send('Canceled search')
+        else:
+            try:
+                track = tracks[int(responses.content)-1]
+            except Exception as err:
+                raise commands.CommandInvokeError(err)
+
+        embed = discord.Embed(color=discord.Color.gold())
+        embed.title = 'Track Enqueued'
+        embed.description = f'[{track["info"]["title"]}]({track["info"]["uri"]})'
+
+        await ctx.send(embed=embed)
+
+        addTrack = lavalink.models.AudioTrack(track, ctx.author.id, recommended=True)
+        player.add(requester=ctx.author.id, track=addTrack)
+
+        if not player.is_playing:
+            await player.play()
+
+    @commands.command()
+    async def skip(self, ctx):
+        player = self.client.lavalink.player_manager.get(ctx.guild.id)
+
+        if len(player.queue) > 0 and player.is_connected and player.is_playing:
+            await ctx.send("Skipped")
+            await player.skip()
+        else:
+            await ctx.send("There's No Song In The Queue For Me To Skip.")
 
 def setup(client):
     client.add_cog(Lavalink(client))
