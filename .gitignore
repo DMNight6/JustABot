@@ -5,3 +5,4 @@ __pycache__
 
 # Automated file creations
 client.log
+lavalink.log

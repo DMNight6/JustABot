@@ -2,11 +2,7 @@ import discord, sqlite3, os, logging
 from discord.ext import commands
 from configparser import ConfigParser
 
-Log = logging.getLogger('discord')
-Log.setLevel(logging.DEBUG)
-Handlers = logging.FileHandler('client.log', 'w', 'utf-8', False)
-Handlers.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] : %(message)s'))
-Log.addHandler(Handlers)
+exec(open('./util/logging.py').read())
 
 Config = ConfigParser()
 Config.read('config.ini')

@@ -1,6 +1,5 @@
 import discord, lavalink, re
-from discord import channel
-from discord.ext import commands
+from discord.ext import commands, menus
 from configparser import ConfigParser
 
 Config = ConfigParser()
@@ -31,9 +30,9 @@ class Lavalink(commands.Cog):
         
         return guild_check
 
-    async def cog_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandInvokeError):
-            await ctx.send(error.original)
+    #async def cog_command_error(self, ctx, error):
+    #    if isinstance(error, commands.CommandInvokeError):
+    #        await ctx.send(error.original)
     
     async def ensure_voice(self, ctx):
         player = self.client.lavalink.player_manager.create(ctx.guild.id, endpoint=str(ctx.guild.region))
@@ -181,5 +180,43 @@ class Lavalink(commands.Cog):
             await self.connect_to(ctx.guild.id, None)
             await ctx.send("Disconnected.")
 
+    @commands.command()
+    async def queue(self, ctx, *, suffix=None):
+        player = self.client.lavalink.player_manager.get(ctx.guild.id)
+        try:
+            suffix = int(suffix)
+        except:
+            suffix = None
+        
+        if not player.is_playing:
+            await ctx.send("Am not playing anything.")
+        elif len(player.queue) < 0:
+            await ctx.send('Queue is empty')
+        else:
+            class SongMenu(menus.ListPageSource):
+                def __init__(self, queue):
+                    super().__init__(queue, per_page=10)
+
+                async def format_page(self, menu, page):
+                    pages = menu.current_page * self.per_page
+                    E = discord.Embed(color=discord.Color.dark_gold())
+                    E.title = f"Queue for {ctx.guild.name}"
+                    E.description = f'__Now Playing__:\n[{player.current["title"]}]({player.current["uri"]})\n' + '__Next In Queue__:\n' + '\n'.join(f'{i + 1} • [{v["title"]}]({v["uri"]})' for i, v in enumerate(page, start=pages))
+                    return E
+
+            if suffix == None and len(player.queue) > 0:
+                p = menus.MenuPages(source=SongMenu(player.queue), clear_reactions_after=True)
+                await p.start(ctx)
+            elif suffix < len(player.queue) or suffix > 0 and len(player.queue) > 0:
+                E = discord.Embed(color=discord.Color.gold())
+                E.title = f"Queue Info • {suffix}"
+                E.description = f"""\n
+                    __Title__ • [{player.queue[(suffix - 1)]['title']}]({player.queue[(suffix -1)]['uri']})\n
+                    __Author__ • {player.queue[suffix - 1]['author']}
+                """
+                await ctx.send(embed=E)
+            else:
+                await ctx.send('Queue is empty')
+        
 def setup(client):
     client.add_cog(Lavalink(client))

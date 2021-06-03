@@ -1,0 +1,4 @@
+discord
+lavalink
+discord-ext-menus
+PyNaCl

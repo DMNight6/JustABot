@@ -1,0 +1,11 @@
+Log = logging.getLogger('discord')
+Log.setLevel(logging.DEBUG)
+Handlers = logging.FileHandler('client.log', 'w', 'utf-8', False)
+Handlers.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] : %(message)s'))
+Log.addHandler(Handlers)
+
+Log2 = logging.getLogger('lavalink')
+Log2.setLevel(logging.DEBUG)
+Handlers2 = logging.FileHandler('lavalink.log', 'w', 'utf-8', False)
+Handlers2.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] : %(message)s'))
+Log2.addHandler(Handlers2)
