@@ -14,5 +14,5 @@
     REGION = LAVALINK_REGION_HERE # this is technically any country code do 'eu' for better performance (meybe, idk.)
     IDENTIFIER = LAVALINK_IDENTIFER_HERE # Just a identifier for the .jar  logging, pretty much just put any name you want.
     ```
-Replace the <FIRST_BOT> with the discord bot token. A tutorial can be seen [here](https://www.youtube.com/watch?v=j_sD9udZnCk).
+Replace <BOT_TOKEN_HERE> with the discord bot token. A tutorial can be seen [here](https://www.youtube.com/watch?v=j_sD9udZnCk).
 NOTE: You'll need to invite the bot after its up and ready to be used.
