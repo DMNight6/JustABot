@@ -1,11 +1,11 @@
-import discord, sqlite3, os, logging
+import discord, sqlite3, os, logging, asyncio
 from discord.ext import commands
 from configparser import ConfigParser
 
 exec(open('./util/logging.py').read())
 
 Config = ConfigParser()
-Config.read('config.ini')
+Config.read('./config.ini')
 
 exec(open('./util/create_database.py').read())
 database = sqlite3.connect(database='database.db')
@@ -24,13 +24,20 @@ client = commands.AutoShardedBot(
 
 client.remove_command('help')
 
-@client.listen()
+async def change_presence(client, timer: int):
+    presence_list = ['whatismyprefix','help']
+    for x in presence_list:
+        await client.change_presence(
+            activity=discord.Activity(type=3, name=x),
+            status = discord.Status.online    
+        )
+        await asyncio.sleep(timer)
+
+@client.event
 async def on_ready():
     print(f'{client.user.name} up and ready')
-    await client.change_presence(
-        activity=discord.Activity(type=2, name='server_prefix'),
-        status=discord.Status.online
-    )
+    await client.loop.create_task(change_presence(client=client, timer=10))
+    client.load_extension('commands.lavalink')
     for command in os.listdir('./commands'):
         if command.endswith('.py'):
             client.load_extension(f'commands.{command[:-3]}')
@@ -44,5 +51,12 @@ async def on_guild_join(guild):
 async def on_guild_leave(guild):
     cursor.execute('DELETE FROM sprefix WHERE guildid = $1', (guild.id,))
     database.commit()
+
+@client.listen('on_message')
+async def return_prefix(message):
+    if message.content == "whatismyprefix":
+        await message.channel.send(await client.get_prefix(message))
+    else:
+        pass
 
 client.run(Config['TOKENS']['FIRST_BOT'])

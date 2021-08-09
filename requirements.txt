@@ -2,3 +2,5 @@ discord
 lavalink
 discord-ext-menus
 PyNaCl
+Pillow
+requests

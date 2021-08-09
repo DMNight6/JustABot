@@ -9,15 +9,15 @@ Nodes = Config['LAVALINK']
 url = re.compile(r'https?://(?:www\.)?.+')
 
 class SongMenu(menus.ListPageSource):
-    def __init__(self, queue, name, player):
+    def __init__(self, queue, ctx, player):
         super().__init__(queue, per_page=10)
-        self.name = name
+        self.ctx = ctx
         self.player = player
                 
     async def format_page(self, menu, page):
         pages = menu.current_page * self.per_page
         E = discord.Embed(color=discord.Color.dark_gold())
-        E.title = f"Queue for {self.name}"
+        E.title = f"Queue for {self.ctx.guild.name}"
         E.description = f'__Now Playing__:\n[{self.player.current["title"]}]({self.player.current["uri"]})\n' + '__Next In Queue__:\n' + '\n'.join(f'{i + 1} • [{v["title"]}]({v["uri"]})' for i, v in enumerate(page, start=pages))
         return E
                     
@@ -210,7 +210,7 @@ class Lavalink(commands.Cog):
             await ctx.send('Queue is empty')
         else:
             if suffix == None and len(player.queue) > 0:
-                p = menus.MenuPages(source=SongMenu(player.queue, ctx.guild.name, player), clear_reactions_after=True, delete_message_after=True, timeout=30)
+                p = menus.MenuPages(source=SongMenu(player.queue, ctx, player), clear_reactions_after=True, delete_message_after=True, timeout=30)
                 await p.start(ctx)
             elif suffix < (len(player.queue) + 1) or suffix > 0 and len(player.queue) > 0:
                 E = discord.Embed(color=discord.Color.gold())
@@ -224,7 +224,7 @@ class Lavalink(commands.Cog):
                 await ctx.send('Queue is empty')
     
     @commands.command()
-    async def remove(self, ctx, *, suffix: int) :
+    async def remove(self, ctx, *, suffix: int):
         player = self.client.lavalink.player_manager.create(ctx.guild.id)
         print(len(player.queue))
         if len(player.queue) == 0:
@@ -232,6 +232,13 @@ class Lavalink(commands.Cog):
         elif len(player.queue) > 0 and suffix > 0 or suffix < len(player.queue) + 1:
             await ctx.send(f"Removed track __{player.queue[suffix - 1]['title']}__")
             del player.queue[suffix - 1]
-         
+
+    @commands.command()
+    async def stop(self, ctx):
+        player = self.client.lavalink.player_manager.create(ctx.guild.id)      
+        await player.stop()
+        player.queue.clear()  
+        await ctx.send('yeet myself away :D')
+
 def setup(client):
     client.add_cog(Lavalink(client))
