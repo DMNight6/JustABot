@@ -16,3 +16,8 @@
     ```
 Replace `<BOT_TOKEN_HERE>` with the discord bot token. A tutorial can be seen [here](https://www.youtube.com/watch?v=j_sD9udZnCk).
 NOTE: You'll need to invite the bot after its up and ready to be used.
+
+To Do List:
+- [] Add Lavalink text channel check
+- [] Add server prefix fix
+- [] Optimize the code for faster load speed
