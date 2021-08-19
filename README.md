@@ -2,6 +2,12 @@
  Just a bot that I [live stream](https://twitch.tv/dmnight6) at :D
 
 ## Setup
+1. Install the required dependecies
+    You will need:
+        [Python](https://www.python.org/downloads/)
+        [C++ build tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) 
+    After installing, do: `<pip install -r requirements.txt>` (Make sure you are in the correct bot directory)
+
 1. Setting up the bot
     ```ini
     [TOKENS]
@@ -17,6 +23,7 @@
 Replace `<BOT_TOKEN_HERE>` with the discord bot token. A tutorial can be seen [here](https://www.youtube.com/watch?v=j_sD9udZnCk).
 NOTE: You'll need to invite the bot after its up and ready to be used.
 
+## E
 To Do List:
 - [] Add Lavalink text channel check
 - [] Add server prefix fix

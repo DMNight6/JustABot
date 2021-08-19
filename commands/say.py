@@ -8,6 +8,7 @@ class Say(commands.Cog):
     @commands.command()
     async def say(self, ctx, *, suffix):
         await ctx.send(f'{suffix}')
+        raise kekw
 
 def setup(client):
     client.add_cog(Say(client))

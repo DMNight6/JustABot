@@ -6,10 +6,10 @@ class FetchUser(commands.Cog):
         self.client = client
 
     @commands.command()
-    async def fetchuser(self, ctx, *, id=None):
+    async def getuser(self, ctx, *, id=None):
         id = discord.User or discord.utils.get(ctx.guild.members, id=id)
         embed = discord.Embed()
-        embed.set_thumbnail(url = id.avatar_url)
+        embed.set_thumbnail(url=id.avatar_url)
         embed.description = f"""
             Username : {id.name}
             On guild name : {id.display_name}

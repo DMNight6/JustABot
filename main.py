@@ -35,13 +35,13 @@ async def change_presence(client, timer: int):
 
 @client.event
 async def on_ready():
-    print(f'{client.user.name} up and ready')
-    await client.loop.create_task(change_presence(client=client, timer=10))
-    client.load_extension('commands.lavalink')
     for command in os.listdir('./commands'):
         if command.endswith('.py'):
-            client.load_extension(f'commands.{command[:-3]}')
-
+            print(f'Loaded <{command[:-3]}>')
+            client.load_extension(f'commands.{command[:-3]}')        
+    print(f'{client.user.name} up and ready')
+    await client.loop.create_task(change_presence(client=client, timer=10))  
+    
 @client.listen()
 async def on_guild_join(guild):
     cursor.execute('INSERT INTO sprefix VALUES (?, ?)', (guild.id, '$'))
