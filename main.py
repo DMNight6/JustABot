@@ -16,10 +16,12 @@ def get_prefix(client, message):
     prefixes = cursor.execute('SELECT prefix FROM sprefix WHERE guildid = $1',(message.guild.id,)).fetchone()
     return prefixes[0]
 
+# Intents Fix, Command returining permission to API error. (Line 26)
 client = commands.AutoShardedBot(
     command_prefix=get_prefix,
     status = discord.Status.idle,
-    activity = discord.Activity(type=3, name='assets getting loaded')
+    activity = discord.Activity(type=3, name='assets getting loaded'),
+    intents = discord.Intents.all()
     )
 
 client.remove_command('help')
@@ -32,15 +34,17 @@ async def change_presence(client, timer: int):
             status = discord.Status.online    
         )
         await asyncio.sleep(timer)
-
-@client.event
-async def on_ready():
+@client.listen('on_ready')
+async def load_command():
     for command in os.listdir('./commands'):
         if command.endswith('.py'):
             print(f'Loaded <{command[:-3]}>')
-            client.load_extension(f'commands.{command[:-3]}')        
+            client.load_extension(f'commands.{command[:-3]}')
+
+@client.listen('on_ready')
+async def start_sync_presence():
+    await client.loop.create_task(change_presence(client=client, timer=10))
     print(f'{client.user.name} up and ready')
-    await client.loop.create_task(change_presence(client=client, timer=10))  
     
 @client.listen()
 async def on_guild_join(guild):
@@ -56,7 +60,5 @@ async def on_guild_leave(guild):
 async def return_prefix(message):
     if message.content == "whatismyprefix":
         await message.channel.send(await client.get_prefix(message))
-    else:
-        pass
 
 client.run(Config['TOKENS']['FIRST_BOT'])

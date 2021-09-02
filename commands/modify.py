@@ -6,8 +6,8 @@ class Modify(commands.Cog):
         self.client = client
 
     @commands.command()
-    async def modify(self, ctx, role_id: int, list: int):
-        permission_code = {
+    async def modifyrole(self, ctx, role_id: int, *list_id: int):
+        self.permission_code = {
             1: "CREATE_INSTANT_INVITE",
             2: "KICK_MEMBERS",
             3: "BAN_MEMBERS",
@@ -46,11 +46,22 @@ class Modify(commands.Cog):
             36: "USE_PRIVATE_THREADS",
             37: "USE_EXTERNAL_STICKERS"
         }
-        
-        ## Parsing the permission into 1 list. (Used when error occured.) 
-        permission_name = []
-        for x in range(0, (len(permission_code ) + 1)):
-            permission_name.append(permission_code.get(x))
 
+        list_id = list_id.split(', ')
+        if ctx.author.guild_permission.manage_roles and self.client.guild_permission.manage_roles and (max < 38 for max in list_id):
+            role = discord.utils.get(ctx.guild.roles, role_id)
+            role_permission = discord.Permissions()
+            permission_list = ()
+            permission_list.append(f'{self.permission_code.get(list_id, commands.CommandInvokeError("Out of index range"))} = True')
+            role_permission.update(iter(permission_list))
+            await role.x()
+            
+    def cog_command_error(self, ctx, error):
+        if isinstance(commands.CommandInvokeError, error):
+        ## Parsing the permission into 1 list. (Used when error occured.)
+            permission_name = [
+                permission_code.get(x)
+                for x in range(len(self.permission_code) + 1)
+            ]
 def setup(client):
     client.add_cog(Modify(client))

@@ -63,12 +63,11 @@ class Lavalink(commands.Cog):
 
             if not permissions.connect or not permissions.speak:
                 raise commands.CommandInvokeError('I need the "CONNECT" and "SPEAK" permissions.')
-            
+
             player.store('channel', ctx.channel.id)
             await self.connect_to(ctx.guild.id, str(ctx.author.voice.channel.id))
-        else:
-            if int(player.channel_id) != ctx.author.voice.channel.id:
-                raise commands.CommandInvokeError('You\'re not in the correct voice channel!')
+        elif int(player.channel_id) != ctx.author.voice.channel.id:
+            raise commands.CommandInvokeError('You\'re not in the correct voice channel!')
     
     async def track_hook(self, event):
         if isinstance(event, lavalink.events.QueueEndEvent):
@@ -203,25 +202,24 @@ class Lavalink(commands.Cog):
             suffix = int(suffix)
         except:
             suffix = None
-        
+
         if not player.is_playing:
             await ctx.send("Am not playing anything.")
         elif len(player.queue) == 0:
             await ctx.send('Queue is empty')
-        else:
-            if suffix == None and len(player.queue) > 0:
-                p = menus.MenuPages(source=SongMenu(player.queue, ctx, player), clear_reactions_after=True, delete_message_after=True, timeout=30)
-                await p.start(ctx)
-            elif suffix < (len(player.queue) + 1) or suffix > 0 and len(player.queue) > 0:
-                E = discord.Embed(color=discord.Color.gold())
-                E.title = f"Queue Info • {suffix}"
-                E.description = f"""\n
+        elif suffix is None and len(player.queue) > 0:
+            p = menus.MenuPages(source=SongMenu(player.queue, ctx, player), clear_reactions_after=True, delete_message_after=True, timeout=30)
+            await p.start(ctx)
+        elif suffix < (len(player.queue) + 1) or suffix > 0 and len(player.queue) > 0:
+            E = discord.Embed(color=discord.Color.gold())
+            E.title = f"Queue Info • {suffix}"
+            E.description = f"""\n
                     __Title__ • [{player.queue[(suffix - 1)]['title']}]({player.queue[(suffix -1)]['uri']})\n
                     __Author__ • {player.queue[suffix - 1]['author']}
                 """
-                await ctx.send(embed=E)
-            else:
-                await ctx.send('Queue is empty')
+            await ctx.send(embed=E)
+        else:
+            await ctx.send('Queue is empty')
     
     @commands.command()
     async def remove(self, ctx, *, suffix: int):

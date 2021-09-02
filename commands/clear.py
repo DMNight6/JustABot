@@ -9,8 +9,6 @@ class Clear(commands.Cog):
     async def clear(self, ctx, suffix: int):
         if ctx.author.guild_permissions.manage_message and suffix > 0:
             await ctx.channel.purge(limit=suffix)
-        else:
-            pass
 
 def setup(client):
     client.add_cog(Clear(client))

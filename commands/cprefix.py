@@ -10,8 +10,8 @@ class cprefix(commands.Cog):
 
     @commands.command()
     async def cprefix(self, ctx, *, suffix):
-        if suffix == None or suffix == discord.Member.mention:
-            return await ctx.send("Prefix cannot be a mention or empty")
+        if suffix is None or suffix == discord.Member.mention:
+            await ctx.send("Prefix cannot be a mention or empty")
         else:
             cursor.execute('UPDATE sprefix SET prefix = $1 WHERE guildid = $2',(suffix, ctx.guild.id,))
             database.commit()
