@@ -28,12 +28,14 @@ client.remove_command('help')
 
 async def change_presence(client, timer: int):
     presence_list = ['whatismyprefix','help']
+    await client.wait_until_ready()
     for x in presence_list:
         await client.change_presence(
             activity=discord.Activity(type=3, name=x),
             status = discord.Status.online    
         )
-        await asyncio.sleep(timer)
+    await asyncio.sleep(timer)
+
 @client.listen('on_ready')
 async def load_command():
     for command in os.listdir('./commands'):
@@ -41,8 +43,6 @@ async def load_command():
             print(f'Loaded <{command[:-3]}>')
             client.load_extension(f'commands.{command[:-3]}')
 
-@client.listen('on_ready')
-async def start_sync_presence():
     await client.loop.create_task(change_presence(client=client, timer=10))
     print(f'{client.user.name} up and ready')
     
@@ -53,8 +53,10 @@ async def on_guild_join(guild):
 
 @client.listen()
 async def on_guild_leave(guild):
-    cursor.execute('DELETE FROM sprefix WHERE guildid = $1', (guild.id,))
-    database.commit()
+    ## Executed when a bot leaves the guild (Purging useless data)
+    if cursor.execute("SELECT prefix FROM sprefix WHERE guildid = $1", (guild.id,)):
+        cursor.execute('DELETE FROM sprefix WHERE guildid = $1', (guild.id,))
+        database.commit()
 
 @client.listen('on_message')
 async def return_prefix(message):

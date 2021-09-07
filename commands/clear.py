@@ -7,7 +7,7 @@ class Clear(commands.Cog):
 
     @commands.command()
     async def clear(self, ctx, suffix: int):
-        if ctx.author.guild_permissions.manage_message and suffix > 0:
+        if ctx.author.guild_permissions(manage_message=True) and suffix > 0:
             await ctx.channel.purge(limit=suffix)
 
 def setup(client):
