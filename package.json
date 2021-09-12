@@ -1,0 +1,25 @@
+{
+  "name": "justabot-rewrite",
+  "version": "1.0.0",
+  "description": "Rewrite version in js",
+  "main": "index.ts",
+  "dependencies": {
+    "discord.js": "^13.1.0",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "ts-node index.ts",
+    "install": "npm install && npm install -g typescript ts-node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DMNight6/JustABot.git"
+  },
+  "author": "DMNight6",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DMNight6/JustABot/issues"
+  },
+  "homepage": "https://github.com/DMNight6/JustABot#readme"
+}
