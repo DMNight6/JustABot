@@ -1,5 +1,4 @@
-# Ignore files here (Personal Files)
-tsconfig.json
+# Personal Files
+data.ts
+prefix_data.json
 node_modules
-main.db
-data.json

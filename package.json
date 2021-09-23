@@ -1,16 +1,22 @@
 {
-  "name": "justabot-rewrite",
+  "name": "justabot",
   "version": "1.0.0",
-  "description": "Rewrite version in js",
-  "main": "index.ts",
+  "description": "",
+  "main": "index.js",
   "dependencies": {
+    "@types/winston": "^2.4.4",
     "discord.js": "^13.1.0",
-    "sqlite3": "^5.0.2"
+    "erela.js": "^2.3.3",
+    "node-fetch": "^3.0.0",
+    "yaml": "^1.10.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node-fetch": "^3.0.3"
+  },
   "scripts": {
-    "start": "ts-node index.ts",
-    "install": "npm install && npm install -g typescript ts-node"
+    "start": "npm run pm2:lavalink && npm run pm2:bot",
+    "pm2:bot": "pm2 start src/index.ts --name\"Bot\"",
+    "pm2:lavalink": "pm2 start src/scripts/lavalink.ts --name \"Lavalink\""
   },
   "repository": {
     "type": "git",
