@@ -8,6 +8,7 @@
     "discord.js": "^13.1.0",
     "erela.js": "^2.3.3",
     "node-fetch": "^3.0.0",
+    "pm2": "^5.1.1",
     "yaml": "^1.10.2"
   },
   "devDependencies": {
