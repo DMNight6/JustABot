@@ -30,12 +30,20 @@ NOTE: You'll need to invite the bot after its up and ready to be used.
 NOTE2: The Example file is provided, You just need to rename `<example.data.ts>` in `<./src/>` to `<data.ts>`
 NOTE3: Lavalink is automatically downloaded by the script `<./src/scripts/lavalink.ts>`. No need to manually download it
 
+1. Build the bot
+    There is scripts ready for you, all you need to do is:
+        - Path location should be `<./JustABot.js>`
+    
+    After making sure you are in the correct dir, do `<npm run build>`. This will build the bot and be ready for use.
+    
 1. Start the Bot
     To start the Bot, all you need to do is do `<npm run start>` to start the bot. As package.json has:
     ```json
-    "scripts": {
-        "start": "npm run pm2:lavalink && npm run pm2:bot",
-        "pm2:bot": "pm2 start src/index.ts --name\"Bot\"",
-        "pm2:lavalink": "pm2 start src/scripts/lavalink.ts --name \"Lavalink\""
-    },
+        "scripts": {
+            "build": "npm run prebuild:dev && tsc",
+            "prebuild:dev": "rimraf dist",
+            "start": "npm run pm2:lavalink && npm run pm2:bot",
+            "pm2:bot": "pm2 start dist/src/index.ts --name\"Bot\"",
+            "pm2:lavalink": "pm2 start dist/src/scripts/lavalink.ts --name \"Lavalink\""
+        },
     ```

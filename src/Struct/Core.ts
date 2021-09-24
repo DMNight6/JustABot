@@ -1,4 +1,4 @@
-import { Client, Collection, Intents } from 'discord.js';
+import { Client, Collection, Intents, Presence } from 'discord.js';
 import { Manager } from 'erela.js';
 import { readdirSync } from 'fs';
 import { resolve } from 'path';
@@ -43,11 +43,26 @@ export class Core extends Client {
                 await import(resolve(__dirname, "..", "event", "client", file))
             ).default;
             this.on(event.name, (...args) => event.execute(this, ...args))
+            this.logger.info(`Loaded ClientEvt: ${event.name}`);
+        }
+    }
+
+    private async importManagerEvents(): Promise<void> {
+        const files = readdirSync(resolve(__dirname, "..", "event", "manager"))
+        for (const file of files) {
+            const ManagerEvent = (
+                await import(resolve(__dirname, "..", "event", "manager", file))
+            ).default;
+            this.Manager.on(ManagerEvent.name, (...args) => 
+                ManagerEvent.execute(this, this.Manager, ...args)
+            );
+            this.logger.info(`Loaded ManagerEvt: ${ManagerEvent.name}`);
         }
     }
 
     public async connect(): Promise<string> {
         await this.importEvent();
+        await this.importManagerEvents();
         await this.importCommands();
         return this.login(this.Token);
     }

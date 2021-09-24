@@ -2,3 +2,6 @@
 data.ts
 prefix_data.json
 node_modules
+dist/
+application.yml
+Lavalink.jar

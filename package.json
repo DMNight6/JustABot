@@ -5,19 +5,21 @@
   "main": "index.js",
   "dependencies": {
     "@types/winston": "^2.4.4",
+    "axios": "^0.21.4",
     "discord.js": "^13.1.0",
     "erela.js": "^2.3.3",
-    "node-fetch": "^3.0.0",
     "pm2": "^5.1.1",
+    "rimraf": "^3.0.2",
     "yaml": "^1.10.2"
   },
-  "devDependencies": {
-    "@types/node-fetch": "^3.0.3"
-  },
   "scripts": {
+    "build": "npm run prebuild:dev && tsc",
+    "prebuild:dev": "rimraf dist",
     "start": "npm run pm2:lavalink && npm run pm2:bot",
-    "pm2:bot": "pm2 start src/index.ts --name\"Bot\"",
-    "pm2:lavalink": "pm2 start src/scripts/lavalink.ts --name \"Lavalink\""
+    "pm2:bot": "pm2 start ./dist/src/index.js --name\"Bot\"",
+    "pm2:lavalink": "pm2 start ./dist/src/scripts/lavalink.js --name \"Lavalink\"",
+    "stop": "pm2 kill",
+    "checkUpdate": "npx npm-check-updates -u && npm install --save"
   },
   "repository": {
     "type": "git",

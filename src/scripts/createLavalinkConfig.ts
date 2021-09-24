@@ -2,7 +2,7 @@ import * as yaml from 'yaml';
 import * as fs from 'fs';
 import CONFIG from '../data';
 import Logger from '../Struct/Logger'
-
+import {resolve} from 'path'
 Logger.info('Creating Lavalink Config File...');
 
 const LavalinkConfig = {
@@ -52,9 +52,6 @@ const LavalinkConfig = {
 const yamlFormating = yaml.stringify(LavalinkConfig, {
     indent: 4,
 });
-
-export function createLavalinkConfig() {
-    fs.writeFileSync("../Lavalink/application.yaml", yamlFormating)
+export async function createConfig() {
+    fs.writeFileSync(resolve(__dirname, "..", 'Lavalink', 'application.yml'), yamlFormating)
 }
-
-fs.writeFileSync("./application.yaml", yamlFormating)
