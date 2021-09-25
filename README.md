@@ -8,7 +8,7 @@
         [Java JDK < 11](https://www.oracle.com/java/technologies/downloads/)
     After installing, do: `npm install` (Make sure you are in the correct bot directory)
 
-1. Setting up the bot
+1. Setting up the bot enviroment files
     ```ts
     const LAVALINK = {
     host: "localhost",
@@ -32,7 +32,7 @@ NOTE3: Lavalink is automatically downloaded by the script `<./src/scripts/lavali
 
 1. Build the bot
     There is scripts ready for you, all you need to do is:
-        - Path location should be `<./JustABot.js>`
+        - Path location should be `<./JustABot/>` (It actually doesn't matter if you are in other dir except outside of this dir)
     
     After making sure you are in the correct dir, do `<npm run build>`. This will build the bot and be ready for use.
     

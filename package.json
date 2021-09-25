@@ -19,7 +19,8 @@
     "pm2:bot": "pm2 start ./dist/src/index.js --name\"Bot\"",
     "pm2:lavalink": "pm2 start ./dist/src/scripts/lavalink.js --name \"Lavalink\"",
     "stop": "pm2 kill",
-    "checkUpdate": "npx npm-check-updates -u && npm install --save"
+    "checkUpdate": "npx npm-check-updates -u && npm install --save",
+    "devUseOnly": "rimraf node_modules"
   },
   "repository": {
     "type": "git",
