@@ -1,7 +1,5 @@
 # Personal Files
-data.ts
-prefix_data.json
-node_modules
-dist/
+data.js
 application.yml
 Lavalink.jar
+node_modules

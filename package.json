@@ -13,15 +13,7 @@
     "yaml": "^1.10.2"
   },
   "scripts": {
-    "build": "npm run prebuild:dev && tsc",
-    "prebuild:dev": "rimraf dist",
-    "start": "npm run pm2:lavalink && npm run pm2:bot",
-    "dev": "ts-node src/index.ts",
-    "pm2:bot": "pm2 start ./dist/index.js --name\"Bot\"",
-    "pm2:lavalink": "pm2 start ./dist/scripts/lavalink.js --name \"Lavalink\"",
-    "stop": "pm2 kill",
-    "checkUpdate": "npx npm-check-updates -u && npm install --save",
-    "devUseOnly": "rimraf node_modules"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
