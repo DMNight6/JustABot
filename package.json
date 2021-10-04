@@ -17,7 +17,8 @@
     "pm2:startBot": "pm2 start src/index.js --name \"Bot\"",
     "pm2:startLv": "pm2 start src/scripts/SpawnLavalink.js --name \"Lavalink\"",
     "start": "npm run pm2:startBot && npm run pm2:startLv",
-    "stop": "pm2 kill"
+    "stop": "pm2 kill",
+    "dev:start": "node src/index.js"
   },
   "repository": {
     "type": "git",
