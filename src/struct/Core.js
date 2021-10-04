@@ -13,7 +13,7 @@ module.exports = class Core extends Client {
     
     commands = new Collection();
     logger = WinstonLogger
-
+    
     async importEvents() {
         const eventFiles = readdirSync(resolve(__dirname, '..', 'events', 'client')).filter(file => file.endsWith('js'));
         for (const file of eventFiles) {

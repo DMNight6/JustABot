@@ -4,15 +4,19 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "winston": "^2.4.4",
     "axios": "^0.21.4",
     "discord.js": "^13.1.0",
     "erela.js": "^2.3.3",
+    "pm2": "^5.1.2",
     "rimraf": "^3.0.2",
+    "winston": "^2.4.4",
     "yaml": "^1.10.2"
   },
   "scripts": {
-    "start": "node index.js"
+    "pm2:startBot": "pm2 start src/index.js --name \"Bot\"",
+    "pm2:startLv": "pm2 start src/scripts/SpawnLavalink.js --name \"Lavalink\"",
+    "start": "npm run pm2:startBot && npm run pm2:startLv",
+    "stop": "pm2 kill"
   },
   "repository": {
     "type": "git",
