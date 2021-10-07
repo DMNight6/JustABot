@@ -1,45 +1,30 @@
-import discord from 'discord.js'; // Discord module.
-import erela from 'erela.js'; // For music.
-import { readdirSync } from 'fs'; // Filesystem.
-import path from 'path' // Path.
-import { CONFIG } from '../data';
-import { ICommand, IEvent } from '../interface';
-import Loggers from './Logger';
+import { Client, Intents } from 'discord.js';
+import { readdirSync } from 'fs'
+import { resolve } from 'path'
+import Logger from './Logger';
 
-export class Core extends discord.Client {
+export class Core extends Client {
 
-    private bot_token = CONFIG.TOKEN;
-    public logger = Loggers;
+    private erela_config:any;
 
-    constructor() {
+    constructor(bot_token: string, ere_config: [any]) {
         super({
-            intents: new discord.Intents(32789)
+            intents: new Intents()
         })
-    };
+        this.token = bot_token
+        this.erela_config = ere_config
+    }
 
-    public commands: discord.Collection<string, ICommand> = new discord.Collection();
+    public logger = Logger;
 
-    private async importEvents(): Promise<void> {
-        const eventFiles = readdirSync(path.resolve(__dirname, '..', 'events', 'client'))
-        for (const file of eventFiles) {
-            const event: IEvent = (await import(path.resolve(__dirname, '..', 'events', 'client', file))).default;
-            this.on(event.name, (...args) => event.run(this, ...args))
+    public async importEvent() {
+        const EventFiles = readdirSync(resolve(__dirname, '..', 'event', 'client')).filter(file => file.endsWith('.js'))
+
+        for (const file of EventFiles) {
+            const Event = (
+                await import(resolve(__dirname, '..', 'events', 'client', file))
+            ).default;
+            (Event.once ? this.once : this.on)(Event.name, (...args: any) => Event.run(...args))
         }
     }
-
-    private async importCommands(): Promise<void> {
-        const commandFiles = readdirSync(path.resolve(__dirname, '..', 'commands')).filter(file => file.endsWith('.ts'));
-
-        for (const file of commandFiles) {
-            const command: ICommand = (await import(path.resolve(__dirname, '..', 'commands', file))).default;
-            this.commands.set(command.name, command);
-        }
-    }
-
-    public async connect(): Promise<string> {
-        await this.importEvents();
-        await this.importCommands();
-        return this.login(this.bot_token)
-    }
-
-}; // Structure of the client<boolean>
+}
