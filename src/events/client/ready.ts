@@ -1,11 +1,11 @@
 import { IEvent } from '../../interface';
 
 const ReadyEvent: IEvent = {
-    name: "ready",
-    once: true,
+    name: "ready", // Event name
+    once: true, // One time only?
     run: async(client) => {
         client.logger.info(`${client.user?.tag} is up and online.`);
-    }
+    } // Do ...
 }
 
-export default ReadyEvent
+export default ReadyEvent // Export.

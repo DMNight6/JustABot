@@ -20,18 +20,16 @@ export class Core extends discord.Client {
     public commands: discord.Collection<string, ICommand> = new discord.Collection(); // Collection of commands on function importCommands
 
     private async importEvents(): Promise<void> {
-        const eventFiles = readdirSync(path.resolve(__dirname, '..', 'events', 'client')) /*
-            Start a Array of files.
-        */
-        for (const file of eventFiles) {
+        const eventFiles = readdirSync(path.resolve(__dirname, '..', 'events', 'client'));
+
+        for(const file of eventFiles) {
             const event: IEvent = (
                 await import(path.resolve(__dirname, '..', 'events', 'client', file))
-            ).default; // Event file import.
-            (event.once ? this.once : this.on)(event.name, (...args) => event.run(this, ...args)); /*
-                I dunno if this works or not but I don't care anymore.
-            */
+            ).default;
+
+            (event.once ? this.once : this.on)(event.name, (...args) => event.run(this, ...args))
         }
-    } // This is annyoing. Have to find a way to let event.once work.
+    }
 
     private async importCommands(): Promise<void> {
         const commandFiles = readdirSync(path.resolve(__dirname, '..', 'commands')).filter(file => file.endsWith('.ts'));

@@ -1,21 +1,21 @@
 {
   "name": "justabot",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Just a bot I code on stream",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DMNight6/JustABot.git"
+    "url": "git+https://github.com/DMNight6/JustABot/tree/main-js"
   },
-  "author": "",
+  "author": "Midnight#3929",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/DMNight6/JustABot/issues"
   },
-  "homepage": "https://github.com/DMNight6/JustABot#readme",
+  "homepage": "https://github.com/DMNight6/JustABot/tree/main-js#readme",
   "dependencies": {
     "axios": "^0.22.0",
     "discord.js": "^13.1.0",
