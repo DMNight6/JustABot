@@ -5,7 +5,7 @@ const PingCommand: ICommand = {
     category: 'Fun',
     alias: [],
     run: async(client, message, args) => {
-        await message.channel.send('Pong!')
+        message.channel.send('Pong!')
     }
 }
 

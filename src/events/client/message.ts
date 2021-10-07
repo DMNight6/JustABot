@@ -3,6 +3,7 @@ import { ICommand, IEvent } from "../../interface";
 
 const messageEvent: IEvent = {
     name: 'message', // Deprecated method, Moving to 'messageCreate' soon. OR slash command.
+    once: false,
     run: async(client, message: Message) => {
         if (!message.content || !message.guild || message.author.bot) return;
         const prefix = '$';

@@ -6,7 +6,7 @@ interface RunArgs {
     ): any
 } /*
     Usable arguments for ICommand.
-    run(<CommandArgs>) {} // Expected typing.
+    run: async(<CommandArgs>) => {} // Expected typing.
 */
 
 export interface ICommand {

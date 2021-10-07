@@ -5,10 +5,10 @@ interface RunArgs {
     ): any
 }/*
     Usable argsuments in IEvent.
-    run(<RunArgs>) // Expected typings.
+    run: async(<RunArgs>) => {} // Expected typings.
     // ...args is a any array type. Which means if the event is like guildCreate, ...args is there to the rescue. //
             Expected usage for IEvent if it is not <client>:
-            run(guild) {
+            run: async(guild) => {
                 ... 
             }
     
@@ -16,5 +16,6 @@ interface RunArgs {
 
 export interface IEvent {
     name: string
-    run: RunArgs;
+    once: boolean
+    run: RunArgs
 }
