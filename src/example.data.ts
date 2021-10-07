@@ -9,7 +9,7 @@ export const CONFIG = {
     ERELA: {
         nodes: [LAVALINK]
     },
-    LAVALINK
+    LAVALINK: [LAVALINK]
 
 }
 

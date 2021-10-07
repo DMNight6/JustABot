@@ -22,7 +22,9 @@ export class Core extends discord.Client {
     private async importEvents(): Promise<void> {
         const eventFiles = readdirSync(path.resolve(__dirname, '..', 'events', 'client'))
         for (const file of eventFiles) {
-            const event: IEvent = (await import(path.resolve(__dirname, '..', 'events', 'client', file))).default;
+            const event: IEvent = (
+                await import(path.resolve(__dirname, '..', 'events', 'client', file))
+            ).default;
             this.on(event.name, (...args) => event.run(this, ...args))
         }
     }
@@ -31,7 +33,9 @@ export class Core extends discord.Client {
         const commandFiles = readdirSync(path.resolve(__dirname, '..', 'commands')).filter(file => file.endsWith('.ts'));
 
         for (const file of commandFiles) {
-            const command: ICommand = (await import(path.resolve(__dirname, '..', 'commands', file))).default;
+            const command: ICommand = (
+                await import(path.resolve(__dirname, '..', 'commands', file))
+            ).default;
             this.commands.set(command.name, command);
         }
     }
