@@ -1,3 +1,7 @@
 # File to ignore
 node_modules
+<<<<<<< HEAD
 data.ts
+=======
+.vscode
+>>>>>>> parent of a723f02 (Revert "I am so done")
