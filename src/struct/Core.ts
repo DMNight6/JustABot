@@ -1,51 +1,52 @@
-import discord from 'discord.js'; // Discord module.
-import erela from 'erela.js'; // For music.
-import { readdirSync } from 'fs'; // Filesystem.
-import path from 'path' // Path.
-import { CONFIG } from '../data';
-import { ICommand, IEvent } from '../interface';
-import Loggers from './Logger';
+import discord, { Intents } from 'discord.js' // Discord.
+import { ICommand, IEvent } from "../interface";
+import { readdirSync } from 'fs';
+import { resolve } from 'path';
+import Logger from './Logger';
 
-export class Core extends discord.Client {
+class Core extends discord.Client {
 
-    private bot_token = CONFIG.TOKEN; // Constructor doesn't want to work with me.
-    public logger = Loggers;
-
-    constructor() {
+    declare public token: string;
+    public logger = Logger;
+    constructor(token: string) {
         super({
-            intents: new discord.Intents(32789)
+            intents: new discord.Intents(32767)
         })
-    };
+        this.token = token
+    }
 
-    public commands: discord.Collection<string, ICommand> = new discord.Collection(); // Collection of commands on function importCommands
+    public commands: discord.Collection<string, ICommand> = new discord.Collection();
+    public cmdAlias: discord.Collection<string, ICommand> = new discord.Collection();
 
-    private async importEvents(): Promise<void> {
-        const eventFiles = readdirSync(path.resolve(__dirname, '..', 'events', 'client'));
 
-        for(const file of eventFiles) {
-            const event: IEvent = (
-                await import(path.resolve(__dirname, '..', 'events', 'client', file))
-            ).default;
-
-            (event.once ? this.once : this.on)(event.name, (...args) => event.run(this, ...args))
+    private async importEvents() {
+        const EventFiles = readdirSync(resolve(__dirname, '..', 'events', 'client')).filter(file => file.endsWith('.ts'))
+        for (const file of EventFiles) {
+            const Event = (await import(resolve(__dirname, '..', 'events', 'client', file))).default;
+            if (Event.once) this.once(Event.name, (...args) => Event.run(this, ...args))
+            else this.on(Event.name, (...args) => Event.run(this, ...args))
         }
     }
 
-    private async importCommands(): Promise<void> {
-        const commandFiles = readdirSync(path.resolve(__dirname, '..', 'commands')).filter(file => file.endsWith('.ts'));
-
-        for (const file of commandFiles) {
-            const command: ICommand = (
-                await import(path.resolve(__dirname, '..', 'commands', file))
-            ).default;
-            this.commands.set(command.name, command);
+    /*This is stupid. I am changing the way of command loading.*/
+    private async importCommands() {
+        const CommandFiles = readdirSync(resolve(__dirname, '..', 'commands')).filter(file => file.endsWith('.ts'))
+        for (const file of CommandFiles) {
+            const command = ( await import(resolve(__dirname, '..', 'commands', file)) ).default;
+            this.commands.set(command.name, command) // This creates a Map consisting the key and value.
         }
-    } // This is somehow not working as well.
+    }
+
+    public async getPrefix(id: string): Promise<string> {
+        const guild_prefix = require(resolve(__dirname, '..', 'guild_prefix.json'))
+        return guild_prefix[id]?.gprefix
+    }
 
     public async connect(): Promise<string> {
-        await this.importEvents(); // Begin importing events.
-        await this.importCommands(); // Begin importing commands
-        return this.login(this.bot_token) // Call bot to boot up with provided token. (There is no default token.)
+        await this.importEvents();
+        await this.importCommands();
+        return this.login(this.token)
     }
+}
 
-}; // Structure of the client<boolean>
+export { Core }

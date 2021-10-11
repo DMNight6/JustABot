@@ -11,16 +11,19 @@ async function DownloadFile(url: string, dest: string, cb: Function) {
     }
 
     const file = fs.createWriteStream(dest);
-    await axios({url: url, responseType: 'stream', method: 'get'})
-        .then(async(res) => {
-            await res.data.pipe(file)
-            Logger.info("Downloading Lavalink...")
-            file.on('finish', async() => {
-                file.close();
-                Logger.info("Successed downloading Lavalink.")
-                await cb()
-            })
+    await axios({
+        url: url,
+        method: 'GET',
+        responseType: 'stream'
+    })
+    .then(async(res) => {
+        await res.data.pipe(file)
+        file.on('finish', async () => {
+            file.close();
+            Logger.info(`Successfully downloaded Lavalink.`);
+            await cb();
         })
+    })
 }
 
 async function SpawnTask() {
@@ -44,7 +47,7 @@ async function SpawnTask() {
 }
 
 Logger.info("Fetching Latest Lavalink.jar...")
-axios.get("https://api.github.com/repos/freyacodes/Lavalink/releases/latest")
+axios.get("https://api.github.com/repos/freyacodes/Lavalink/releases/latest", {responseType: 'json'})
     .then(res => res.data)
     .then(json => {
         if(json.assets[0] && json.assets[0].browser_download_url){
