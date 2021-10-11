@@ -7,7 +7,7 @@ const MessageCreateEvent: IEvent = {
     run: async(client, message: Message) => {
         if (!message.content || message.author.bot || !message.guild) return;
         const defaultPrefix = '$'
-        const prefix = await client.getPrefix(message.guild.id) || defaultPrefix;
+        const prefix = await client.getPrefix(message.guild.id) || defaultPrefix; // This gets [prefix] from the json data. If undefined/null, return default prefix.
 
         if(!message.content.startsWith(prefix)) return;
         const [name, ...args] = message.content
