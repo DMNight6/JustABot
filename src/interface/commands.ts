@@ -9,6 +9,6 @@ interface RunArgs {
 export interface ICommand {
     name: string // This line will be str. Nothing else.
     category: string
-    alias : string[] | undefined // Return ARRAY else Undefined
+    alias? : string[] // Return ARRAY else undefined or shit can be ignored.
     run: RunArgs // What to expect? RunArgs. Can be a Prmoise of anything.
 }
