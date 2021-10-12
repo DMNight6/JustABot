@@ -28,7 +28,7 @@ class Core extends discord.Client {
     public commands: discord.Collection<string, ICommand> = new discord.Collection(); /* This is the commands collection.*/
     public cmdAlias: discord.Collection<string, ICommand> = new discord.Collection(); /* This is aliases collection for commands. */
 
-    private async importEvents() {
+    private async importEvents(): Promise<void> {
         const EventFiles = readdirSync(resolve(__dirname, '..', 'events', 'client')).filter(file => file.endsWith('.ts'))
         for (const file of EventFiles) {
             const Event = (await import(resolve(__dirname, '..', 'events', 'client', file))).default;
@@ -37,15 +37,16 @@ class Core extends discord.Client {
         }
     }
 
-    private async importManagerEvent() {
+    private async importManagerEvent(): Promise<void> {
         const EventFileManager = readdirSync(resolve(__dirname, '..', 'events', 'manager')).filter(file => file.endsWith('.ts'))
         for (const file of EventFileManager) {
-            const Event = (await import(resolve(__dirname, '..', 'events', 'manager', file))).default;
-            this.on(Event.name, (...args) => Event.run(this, this.Music, ...args))
+            const MEvent = (await import(resolve(__dirname, '..', 'events', 'manager', file))).default;
+            this.Music.on(MEvent.name, (...args) => MEvent.run(this, this.Music, ...args))
         }
     }
+    
     /* Changed how commands are loaded. */
-    private async importCommands() {
+    private async importCommands(): Promise<void> {
         const CommandFiles = readdirSync(resolve(__dirname, '..', 'commands')).filter(file => file.endsWith('.ts'))
         for (const file of CommandFiles) {
             const command = ( await import(resolve(__dirname, '..', 'commands', file)) ).default;

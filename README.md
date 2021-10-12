@@ -10,6 +10,8 @@
 
     After installing, do: `<npm install>` (Make sure you are in the correct bot directory)
 
+    After `<npm install>`, do `<npm install typescript ts-node>`
+
 1. Setting up the bot
 ```ts
     const LAVALINK = {
