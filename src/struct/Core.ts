@@ -4,7 +4,6 @@ import { readdirSync } from 'fs';
 import { resolve } from 'path';
 import Logger from './Logger';
 import { Manager } from 'erela.js';
-import { CONFIG } from '../data';
 
 class Core extends discord.Client {
 
