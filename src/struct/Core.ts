@@ -28,6 +28,7 @@ class Core extends discord.Client {
     public commands: discord.Collection<string, ICommand> = new discord.Collection(); /* This is the commands collection.*/
     public cmdAlias: discord.Collection<string, ICommand> = new discord.Collection(); /* This is aliases collection for commands. */
 
+    /* This imports the event from events/client and loads it on this */
     private async importEvents(): Promise<void> {
         const EventFiles = readdirSync(resolve(__dirname, '..', 'events', 'client')).filter(file => file.endsWith('.ts'))
         for (const file of EventFiles) {
@@ -37,6 +38,7 @@ class Core extends discord.Client {
         }
     }
 
+    /* This imports the event from events/manager and loads it on this.Music */
     private async importManagerEvent(): Promise<void> {
         const EventFileManager = readdirSync(resolve(__dirname, '..', 'events', 'manager')).filter(file => file.endsWith('.ts'))
         for (const file of EventFileManager) {
