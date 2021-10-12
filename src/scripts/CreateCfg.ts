@@ -11,7 +11,7 @@ const LavalinkConfig = {
 
     lavalink: {
         server: {
-            password: CONFIG.LAVALINK.password,
+            password: CONFIG.LAVALINK.pass,
             sources: {
                 youtube: true,
                 bandcamp: true,
@@ -48,6 +48,8 @@ const LavalinkConfig = {
 } // File Data of application.yml. 
 
 const Formatting = yaml.stringify(LavalinkConfig, {indent: 5}); // Formatting of the file
+
+fs.writeFileSync(path.resolve(__dirname, "..", "Lavalink", "application.yml"), Formatting) // Wrtie when this file ran by manual.
 
 export async function createcfg(): Promise<void> {
     return fs.writeFileSync(path.resolve(__dirname, "..", "Lavalink", "application.yml"), Formatting)
