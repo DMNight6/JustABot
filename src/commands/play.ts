@@ -46,7 +46,7 @@ const PlayCommand: ICommand = {
             if (!result.playlist) return;
             player.queue.add(result.tracks)
             const shouldPlayNow = !player.playing && !player.paused && player.queue.totalSize === result.tracks.length
-            if (!shouldPlayNow) await message.channel.send({embeds: [new MessageEmbed().setAuthor(`Added To Queue`, client.user?.displayAvatarURL()).setDescription(`[${result.playlist.name}](${result.playlist.uri})\nTracks • ${result.tracks.length}`).setFooter(`Requested By • ${message.author.tag}`, message.author.avatarURL()!).setColor('RANDOM').setThumbnail(result.playlist.selectedTrack?.displayThumbnail('maxresdefault')!)]})
+            if (!shouldPlayNow) await message.channel.send({embeds: [new MessageEmbed().setAuthor(`Added To Queue`, client.user?.displayAvatarURL()).setDescription(`[${result.playlist.name}](${result.playlist.selectedTrack?.uri})\nTracks • ${result.tracks.length}`).setFooter(`Requested By • ${message.author.tag}`, message.author.avatarURL()!).setColor('RANDOM').setThumbnail(result.playlist.selectedTrack?.displayThumbnail('maxresdefault')!)]})
             else await player.play();
         } else if (result.loadType === `NO_MATCHES`) {
             message.channel.send(`My bad, Seems like I can't find the songs you queried for`)
