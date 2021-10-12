@@ -4,6 +4,7 @@ import { readdirSync } from 'fs';
 import { resolve } from 'path';
 import Logger from './Logger';
 import { Manager } from 'erela.js';
+import { CONFIG } from '../data';
 
 class Core extends discord.Client {
 
@@ -11,13 +12,13 @@ class Core extends discord.Client {
     declare public Music: Manager;
     public logger = Logger;
 
-    constructor(token: string, public erela_config: any) {
+    constructor(token: string, erela_config: object) {
         super({
             intents: new discord.Intents(32767)
         })
         this.token = token;
         this.Music = new Manager({
-            ...this.erela_config,
+            ...erela_config,
             send: (id, payload) => {
                 const guild = this.guilds.cache.get(id)
                 if (guild) guild.shard.send(payload)

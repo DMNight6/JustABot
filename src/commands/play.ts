@@ -53,3 +53,5 @@ const PlayCommand: ICommand = {
         }
     }
 }
+
+export default PlayCommand

@@ -21,3 +21,5 @@ const MTrackStartEvent: IManagerEvent = {
         }
     }
 }
+
+export default MTrackStartEvent
