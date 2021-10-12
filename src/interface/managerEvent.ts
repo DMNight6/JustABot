@@ -9,6 +9,6 @@ interface RunArgs {
 }
 
 export interface IManagerEvent {
-    name: string    
+    name: string
     run: RunArgs
 }
