@@ -1,5 +1,5 @@
-import Discord, { ButtonInteraction, Interaction, MessageEmbed } from 'discord.js'
-import { Player, Queue } from 'erela.js'
+import Discord, { ButtonInteraction, MessageReaction } from 'discord.js'
+import { Queue } from 'erela.js'
 import { ICommand } from '../interface'
 
 const QueueCommand: ICommand = {
@@ -10,46 +10,35 @@ const QueueCommand: ICommand = {
         if (!player) return message.channel.send(`This guild doesn't have any player (yet)`)
         if (player?.queue.length === 0 && !player.queue.current) return message.channel.send(`kekw, this guild doesn't have any song playing + queue is empty`)
 
-        const embed = GetEmbedInList(player.queue, 10);
-        let currentPage = 0;
-
-        const row = new Discord.MessageActionRow().addComponents(
-            new Discord.MessageButton()
-                .setCustomId('back-bt')
-                .setStyle('PRIMARY')
-                .setLabel('Previous Page'),
-            
-            new Discord.MessageButton()
-                .setCustomId('foward-bt')
-                .setStyle('SECONDARY')
-                .setLabel('Next Page')
-        );
-
-        const sendEmbed = await message.channel.send({embeds: [embed[currentPage].setFooter(`Page ${currentPage + 1} of ${embed.length}`)], components: [row]})
+        /* Permission Check */
+        if (!message.guild?.me?.permissionsIn(message.channel.id).has('MANAGE_MESSAGES')) return message.channel.send(`I refuse to show queue. I can't change the message if I miss the perms MANAGE_MESSAGE`)
         
-        const filter = (r: ButtonInteraction) => r.customId in ['foward-bt', 'back-bt'] && r.user.id === message.author.id
-        const collector = sendEmbed.createMessageComponentCollector({filter: filter}) // Create Button Interaction Collector. I'll assume Collector time field is 1 = 1 second. Docs instruction unclear.
+        let currentPage = 0; // Inital page
+        const embed = GetEmbedInList(player.queue, 10);
 
-        collector.on('collect', async (r) => {
-            switch(r.customId) {
-                case 'foward-bt':
-                    if(currentPage < embed.length - 1) {
-                        currentPage++
-                        await sendEmbed.edit({embeds: [embed[currentPage].setFooter(`Page ${currentPage + 1} of ${embed.length}`)], components: [row]});
-                    }
-                    break;
-                case 'back-bt':
-                    if (currentPage !== 0) {
-                        --currentPage;
-                        await sendEmbed.edit({embeds: [embed[currentPage].setFooter(`Page ${currentPage + 1} of ${embed.length}`)], components: [row]});
-                    }
-                    break;
-            }
-        })
-
-        collector.on('end', async () => {
-            await sendEmbed.delete()
-        })
+        const sendEmbed = await message.channel.send({embeds: [embed[currentPage].setFooter(`Page ${currentPage + 1} of ${embed.length}`)]});
+        
+        await sendEmbed.react('⬅') /* I don't really recommend to do this. Slow afaik but I have no choice */ 
+        await sendEmbed.react('➡')
+        
+        const filter = (bt: Discord.MessageReaction, user: Discord.User) => ['⬅', '➡'].includes(bt.emoji.name!) && user.id === message.author.id;
+        const collector = sendEmbed.createReactionCollector({filter: filter, time: 30_000}) // Apparently, 1_000 = 1 second in this lib which would make 1 = 1ms.
+            .on('collect', (bt) => {
+                switch (bt.emoji.name) {
+                    case '⬅':
+                        if (currentPage !== 0) {
+                            --currentPage
+                            sendEmbed.edit({embeds: [embed[currentPage].setFooter(`Page ${currentPage + 1} of ${embed.length}`)]})
+                        }
+                        break;
+                    case '➡':
+                        if (currentPage < embed.length) {
+                            ++currentPage
+                            sendEmbed.edit({embeds: [embed[currentPage].setFooter(`Page ${currentPage + 1} of ${embed.length}`)]})
+                        }
+                        break;
+                }
+            })
     }
 }
 
