@@ -14,7 +14,7 @@ const QueueCommand: ICommand = {
         if (!message.guild?.me?.permissionsIn(message.channel.id).has('MANAGE_MESSAGES')) return message.channel.send(`I refuse to show queue. I can't change the message if I miss the perms MANAGE_MESSAGE`)
         
         let currentPage = 0; // Inital page
-        const embed = await GetEmbedInList(player.queue, 5);
+        const embed = await GetEmbedInList(player.queue); // No more custom page. It'll be static from now on. (Will try to fix it in the mere future.)
 
         const sendEmbed = await message.channel.send({embeds: [embed[currentPage].setFooter(`Page ${currentPage + 1} of ${embed.length}`)]});
         
@@ -36,7 +36,8 @@ const QueueCommand: ICommand = {
                         }
                         break;
                     case '➡':
-                        if (currentPage < embed.length) {
+                        /* Max Page Fix */
+                        if (currentPage < embed.length - 1) {
                             currentPage++;
                             await sendEmbed.edit({embeds: [embed[currentPage].setFooter(`Page ${currentPage + 1} of ${embed.length}`)]})
                         }
@@ -49,22 +50,22 @@ const QueueCommand: ICommand = {
     }
 }
 
-async function GetEmbedInList(queue: Queue, pagePerItem: number): Promise<Discord.MessageEmbed[]> {
+async function GetEmbedInList(queue: Queue): Promise<Array<Discord.MessageEmbed>> {
     const embed = []; /* Array of embeds */ 
-    const valueRemainStatic = pagePerItem; /* Slight tweaks. This value won't change (hopefully) */
     /* Pagination 2.0 kek */
-    for(let item = 0; item < queue.length; item += valueRemainStatic) {
-        const current = queue.slice(item, pagePerItem)
+    let itemInAPage = 10
+    for(let item = 0; item < queue.length; item += 10) {
+        const current = queue.slice(item, itemInAPage)
         let count = item;
-        pagePerItem += pagePerItem
+        itemInAPage += 10
 
-        let info = current.map(async(track) => `[${++count} • ${track.title}](${track.uri})`).join('\n');
+        let info = current.map((track) => `[${++count} • ${track.title}](${track.uri})\nRequested By • <@${track.requester}>`).join('\n');
         const embeds = new Discord.MessageEmbed()
             .setDescription(`[Now Playing • ${queue.current?.title}](${queue.current?.uri})\n\n${info}`);
 
         embed.push(embeds);
     }
-    return embed;
+    return <Array<Discord.MessageEmbed>>embed;
 }
 
 export default QueueCommand
