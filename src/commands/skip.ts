@@ -7,8 +7,14 @@ const SkipCommand: ICommand = {
     run: async(client, message, args) => {
         const player = client.Music.get(message.guild?.id!)
         const song = player?.queue.current
-        player?.stop()
-        message.channel.send({embeds: [new MessageEmbed().setDescription(`Sucessfully skipped [${song?.title}](${song?.uri})`)]})
+        if (isNaN(+args[0])) args = [];
+        if (!args.length) { 
+            player?.stop() 
+            message.channel.send({embeds: [new MessageEmbed().setDescription(`Successfully skipped [${song?.title}](${song?.uri})`)]})
+        } else {
+            player?.stop(+args[0])
+            message.channel.send({embeds: [new MessageEmbed().setDescription(`Successfully skipped ${+args} songs`)]})
+        }
     }
 }
 
