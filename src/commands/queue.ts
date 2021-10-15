@@ -25,6 +25,7 @@ const QueueCommand: ICommand = {
             I wish I can use buttons but that would require interactions and keeps on returining errors. 
             The problem is caused by interaction events is not called. (This would be fixed when Slash command support is added)
         */
+
         const filter = (bt: Discord.MessageReaction, user: Discord.User) => ['⬅', '➡'].includes(bt.emoji.name!) && user.id === message.author.id;
         const collector = sendEmbed.createReactionCollector({filter: filter, time: 30_000}) // Apparently, 1_000 = 1 second in this lib which would make 1 = 1ms.
             .on('collect', async (bt) => {
@@ -65,7 +66,7 @@ async function GetEmbedInList(queue: Queue): Promise<Array<Discord.MessageEmbed>
 
         embed.push(embeds);
     }
-    return <Array<Discord.MessageEmbed>>embed;
+    return <Array<Discord.MessageEmbed>>embed; // If you remove <Array<...>>, It'll return [object promise] as this function have a promise of array.
 }
 
 export default QueueCommand

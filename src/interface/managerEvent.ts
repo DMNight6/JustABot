@@ -1,4 +1,5 @@
 import { Manager, PlayerEvent, PlayerEvents, PlayerEventType, VoiceEvent } from 'erela.js'
+import { ErelaEvents } from './EventKeys/ErelaKey';
 
 interface RunArgs {
     (
@@ -9,6 +10,6 @@ interface RunArgs {
 }
 
 export interface IManagerEvent {
-    name: string
+    name: keyof ErelaEvents
     run: RunArgs
 }
