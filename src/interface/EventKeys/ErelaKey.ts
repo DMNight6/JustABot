@@ -1,12 +1,16 @@
 import { Player, Track, TrackEndEvent, TrackExceptionEvent, TrackStartEvent, TrackStuckEvent, UnresolvedTrack, WebSocketClosedEvent } from "erela.js";
 
+/*
+    This is just a list of events I've found inside erela.js.
+    This interface is used as a keyof in TS. ( Can be found in ../managerEvent )
+*/
 export interface ErelaEvents {
     nodeCreate: [node: Node];
     nodeDestroy: [node: Node];
     nodeConnect: [node: Node];
     nodeReconnect: [node: Node];
-    nodeDisconnect: [node: Node];
-    nodeError: [node: Node];
+    nodeDisconnect: [node: Node, reason: { code?: number; reason?: string }];
+    nodeError: [node: Node, error: Error];
     nodeRaw: [payload: unknown];
     playerCreate: [player: Player];
     playerDestroy: [player: Player];
