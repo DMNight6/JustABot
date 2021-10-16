@@ -1,18 +1,18 @@
 import { MessageEmbed, TextChannel } from "discord.js";
 import { Player, Track } from "erela.js";
-import { IManagerEvent } from "../../interface";
+import { IManagerEvent, ms } from "../../interface";
 
 const MTrackStartEvent: IManagerEvent = {
     name: 'trackStart',
     run: async(client, _manager, player: Player, track: Track) => {
         const Embed = new MessageEmbed()
-        Embed.setAuthor(`Now Playing • ${track.title}`, client.user?.avatar!)
-        Embed.setURL(track.uri)
+        Embed.setAuthor(`Now Playing • ${track.title}`, client.user?.avatar!, track.uri)
+        Embed.setThumbnail(track.displayThumbnail(`maxresdefault`))
         Embed.setDescription(
             `
                 Stream? • ${track.isStream ? 'Yes' : 'No'}
                 Author • ${track.author}
-                Duration • ${track.duration}
+                Duration • ${ms(track.duration)}
             `
         )
         Embed.setColor(track.isStream ? `ORANGE` : `DARK_GREEN`)
