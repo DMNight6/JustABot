@@ -1,5 +1,6 @@
 /* Dynamic help command 131021*/
-import { MessageEmbed } from "discord.js";
+import { EmbedFieldData, Formatters, MessageEmbed } from "discord.js";
+import { info } from "winston";
 import { ICommand } from "../interface";
 
 const DynamicHelpCommand: ICommand = {
@@ -7,18 +8,23 @@ const DynamicHelpCommand: ICommand = {
     category: 'Infomation',
     alias: ['h'],
     run: async(client, message, args) => {
-        const array = Object.values(client.commands).slice().sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
-        const fields: Record<string, Array<string>> = {};
-        for (let i = 0; i < array.length; i++) {
-            const command = array[i]
-            if (fields[command.category] === undefined) {
-                fields[command.category] = []
-            }
-            fields[command.category].push(command.name);
+        const prefix = await client.getPrefix(message.guild?.id!) || '$';
+        const fields: Record<string, ICommand[]> = {};
+        for(const command of Array.from(client.commands)) {
+            if (!fields[command[1].category]) fields[command[1].category] = [command[1]];
+            else fields[command[1].category] = [...fields[command[1].category], command[1]];
         }
 
         if (!args.length) {
-            /* Will do this another time kek */
+            const embed = new MessageEmbed()
+                .setFooter(`Requsted By • ${message.author.tag}`, message.author.displayAvatarURL())
+                .setAuthor(`Bot Commands`, client.user?.displayAvatarURL({dynamic: true}))
+                .setColor('GREY');
+                for (const category in fields) {
+                    const commands = fields[category];
+                    embed.addField(category, commands.map((cmd) => `\`${prefix}${cmd.name}\``).join('\n'));
+                }
+            return message.channel.send({embeds: [embed]})
         }
     }
 }
