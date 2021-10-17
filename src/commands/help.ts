@@ -5,7 +5,7 @@ import { ICommand } from "../interface";
 
 const DynamicHelpCommand: ICommand = {
     name: 'help',
-    category: 'Infomation',
+    category: 'Information',
     alias: ['h'],
     run: async(client, message, args) => {
         const prefix = await client.getPrefix(message.guild?.id!) || '$';
