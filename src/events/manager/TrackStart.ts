@@ -12,10 +12,10 @@ const MTrackStartEvent: IManagerEvent = {
             `
                 Stream? • ${track.isStream ? 'Yes' : 'No'}
                 Author • ${track.author}
-                Duration • ${ms(track.duration)}
+                Duration • ${track.isStream ? 'unknown' : ms(track.duration)}
             `
         )
-        Embed.setColor(track.isStream ? `ORANGE` : `DARK_GREEN`)
+        Embed.setColor(track.isStream ? `PURPLE` : `DARK_GREEN`)
         const channel = client.channels.cache.get(player.textChannel!)
         if (channel?.isText) { // I hate this. Why would you need to bloody do a check to send a message when fucking player returns a text channel?
             (<TextChannel> channel).send({embeds: [Embed]})

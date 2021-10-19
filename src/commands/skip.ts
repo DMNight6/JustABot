@@ -2,7 +2,7 @@ import { MessageEmbed } from "discord.js";
 import { ICommand } from "../interface";
 
 const SkipCommand: ICommand = {
-    name: 'Skip',
+    name: 'skip',
     desc: 'Skip songs or tracks.',
     category: 'Music',
     run: async(client, message, args) => {
