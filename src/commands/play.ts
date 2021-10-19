@@ -12,7 +12,7 @@ const PlayCommand: ICommand = {
 
         let player = client.Music.get(message.guild!.id)
         if (!player) {
-            player = await client.Music.create({
+            player = client.Music.create({
                 guild: message.guild!.id,
                 textChannel: message.channel!.id,
                 voiceChannel: message.member!.voice.channel!.id,
@@ -41,7 +41,7 @@ const PlayCommand: ICommand = {
         if (['SEARCH_RESULT', 'TRACK_LOADED'].includes(result.loadType)) {
             const shouldPlayNow = !player.playing && !player.paused && !player.queue.size
             player.queue.add(result.tracks[0])
-            if (!shouldPlayNow) message.channel.send({embeds: [new MessageEmbed().setAuthor(`Added To Queue`, client.user?.avatarURL()!).setDescription(`[${result.tracks[0].title}](${result.tracks[0].uri})\nArtist • ${result.tracks[0].author}`).setColor('RANDOM').setFooter(`Requster • ${message.author.tag}`, message.author.displayAvatarURL()).setColor('RANDOM').setThumbnail(result.tracks[0].displayThumbnail('maxresdefault'))]})
+            if (!shouldPlayNow) message.channel.send({embeds: [new MessageEmbed().setAuthor(`Added To Queue`, client.user?.avatarURL()!).setDescription(`[${result.tracks[0].title}](${result.tracks[0].uri})\nArtist • ${result.tracks[0].author}`).setColor('RANDOM').setFooter(`Requested by • ${message.author.tag}`, message.author.displayAvatarURL()).setColor('RANDOM').setThumbnail(result.tracks[0].displayThumbnail('maxresdefault'))]})
             else await player.play();
         } else if (result.loadType === `PLAYLIST_LOADED`) {
             if (!result.playlist) return;
