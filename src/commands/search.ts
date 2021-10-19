@@ -8,7 +8,7 @@ const SearchCommand: ICommand = {
     run: async(client, message, args) => {
         if (!args.length) return message.channel.send(`You need to send a search based argument!`)
         if (!message.member!.voice.channel) return message.channel.send(`You need to be in a voice channel to do this!`)
-
+        let searchTerms = args.toString();
         let player = client.Music.get(message.guild?.id!);
 
         if (!player) {
@@ -22,12 +22,12 @@ const SearchCommand: ICommand = {
 
         if (player.state !== 'CONNECTED') player.connect()
 
-        const result = await player.search(args.toString(), message.author.id);
+        const result = await player.search({query: searchTerms, source: "youtube"}, message.author.id);
         if (['SEARCH_RESULT', 'TRACK_LOADED'].includes(result.loadType)) {
             const current = result.tracks.slice(0, 10)
             const info = current.map((track, count) => `[${++count} • ${track.title}](${track.uri})`).join('\n')
             const embed = new MessageEmbed()
-                .setAuthor(`Search Result • ${args.toString()}`)
+                .setAuthor(`Search Result • ${searchTerms}`)
                 .setDescription(`${info}`);
 
             const send = await message.channel.send({embeds: [embed]});
@@ -41,22 +41,16 @@ const SearchCommand: ICommand = {
                     await send.delete();
                     break;
                 
-                case 'queueAll':
-                    player.queue.add(current)
-                    const queueAllEmbed = new MessageEmbed()
-                        .setTitle('Added to queue')
-                        .setDescription(`Tracks • ${current.length}`)
-                        .setFooter(`Requested by • ${message.author.tag}`, message.author.displayAvatarURL())
-                    if (!player.playing && !player.queue.length && player.queue.totalSize === current.length) await player.play()
-                    await message.channel.send({embeds: [queueAllEmbed]})
-                    break;
                 case `${+collector.first()?.content!}`:
-                    const number = +collector.first()?.content!
+                    const number = +collector.first()?.content! - 1
                     if (number < current.length && number > -1) {
                         player.queue.add(current[number])
                         if (!player.playing && !player.queue.length && !player.queue.size) await player.play()
                         await message.channel.send({embeds: [new MessageEmbed().setAuthor(`Added To Queue`, client.user?.displayAvatarURL()).setDescription(`[${current[number].title}](${current[number].uri})\nAuthor • ${current[number].author}`).setFooter(`Requested By • ${message.author.tag}`, message.author.avatarURL()!).setColor('RANDOM').setThumbnail(current[number].displayThumbnail('maxresdefault'))]})
                     }
+                    break;
+                default:
+                    await send.delete()
                     break;
             }
             
