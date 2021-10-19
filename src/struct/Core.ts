@@ -1,4 +1,4 @@
-import discord, { Intents } from 'discord.js' // Discord.
+import discord from 'discord.js' // Discord.
 import { ICommand, IEvent } from "../interface";
 import { readdirSync } from 'fs';
 import { resolve } from 'path';

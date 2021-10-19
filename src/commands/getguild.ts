@@ -3,6 +3,7 @@ import { ICommand } from "../interface";
 
 const GetGuildInfoCommand: ICommand = {
     name: 'getguild',
+    desc: 'Get information about this guild',
     category: 'Information',
     run: async(client, message, args) => {
         const Embed = new MessageEmbed();

@@ -1,7 +1,8 @@
 import { ICommand } from "../interface";
 
 const TestArgsEvent: ICommand = {
-    name: "testargs",
+    name: 'testargs',
+    desc: 'Test if args are parsed sucessfully',
     category: 'Dev',
     alias: [],
     run: async(client, message, args) => {

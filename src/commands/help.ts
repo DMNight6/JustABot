@@ -5,6 +5,7 @@ import { ICommand } from "../interface";
 
 const DynamicHelpCommand: ICommand = {
     name: 'help',
+    desc: 'Get a list of commands',
     category: 'Information',
     alias: ['h'],
     run: async(client, message, args) => {
@@ -22,7 +23,7 @@ const DynamicHelpCommand: ICommand = {
                 .setColor('GREY');
                 for (const category in fields) {
                     const commands = fields[category];
-                    embed.addField(category, commands.map((cmd) => `\`${prefix}${cmd.name}\``).join('\n'));
+                    embed.addField(category, commands.map((cmd) => `\`${prefix}${cmd.name} • ${cmd.desc}\``).join('\n'));
                 }
             return message.channel.send({embeds: [embed]})
         }

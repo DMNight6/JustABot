@@ -5,6 +5,7 @@ import { ICommand } from "../interface";
 
 const QueueCommand: ICommand = {
     name: 'queue',
+    desc: 'Displays the queue',
     category: 'Music',
     run: async(client, message, args) => {
         const player = client.Music.get(message.guild?.id!);

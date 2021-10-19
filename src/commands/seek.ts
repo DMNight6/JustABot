@@ -3,6 +3,7 @@ import { ICommand } from "../interface";
 const stringMatch = /([0-9]{1,2})[:ms](([0-9]{1,2})s?)?/
 const SeekCommand: ICommand = {
     name: 'seek',
+    desc: 'Seek the position of desired time of track.',
     category: "Music",
     run: async (client, message, args) => {
         const match = args.toLocaleString().match(stringMatch);

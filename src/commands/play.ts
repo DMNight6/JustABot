@@ -3,6 +3,7 @@ import { ICommand } from "../interface";
 
 const PlayCommand: ICommand = {
     name: 'play',
+    desc: 'Play the music with search based args or yt links.',
     category: 'Music',
     alias: ['p'],
     run: async(client, message, args) => {
