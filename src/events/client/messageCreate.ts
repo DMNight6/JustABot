@@ -13,7 +13,7 @@ const MessageCreateEvent: IEvent = {
         const [name, ...args] = message.content
             .slice(prefix.length)
             .split(/\s+/);
-        const command = client.commands.get(name) || client.cmdAlias.get(name)
+        const command = client.commands.get(name.toLowerCase()) || client.cmdAlias.get(name.toLowerCase())
         if (!command) return;
         await command.run(client, message, args)
     }

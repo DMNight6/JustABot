@@ -53,7 +53,7 @@ class Core extends discord.Client {
         const CommandFiles = readdirSync(resolve(__dirname, '..', 'commands')).filter(file => file.endsWith('.ts'))
         for (const file of CommandFiles) {
             const command = ( await import(resolve(__dirname, '..', 'commands', file)) ).default;
-            this.commands.set(command.name, command) // This creates a Map consisting the key and value.
+            this.commands.set(command.name.toLowerCase() /* Fix command being uppercase and make you go insane */, command) // This creates a Map consisting the key and value.
             
             if(command?.alias?.length !== 0) {
                 command.alias?.forEach((alias: string) => {
