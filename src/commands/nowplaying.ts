@@ -13,7 +13,9 @@ const NowPlayingCommand: ICommand = {
         if (!player.queue.current) return message.channel.send('Can\'t find current track. Not playing a song atm.');
 
         const embed = new MessageEmbed()
-            .setDescription(`${}`)
+            .setDescription(`${await progressBar(player.queue.current.duration!, player.position, 10)}`)
+
+        await message.channel.send({embeds: [embed]})
     }
 }
 

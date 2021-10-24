@@ -20,3 +20,4 @@ export function ms(ms: number) {
     const result = [['hours', hours], ['minutes', minutes], ['seconds', seconds]].filter(amount => amount[1] > 0).map(amount => amount[1] + ' ' + amount[0]).join(', ');
     return result
 }
+/* This utils is sorting miliseconds to hh mm ss format */

@@ -1,3 +1,5 @@
+import { Formatters } from "discord.js";
+
 function sortTime(value: number) {
     let hours = 0;
     let minutes = 0;
@@ -21,15 +23,22 @@ function sortTime(value: number) {
     return result
 }
 
-export function progressBar(startTime: number, endTime: number, currentTime: number) {
-    let percentage = startTime / endTime;
-    const progress = Math.round((currentTime * percentage))
+/**
+ * Create a text progress bar for music (Thanks to whoever make this ProgressBar.js)
+ * @param endTime - The song ends at x (erela.js Player, player.queue.current.duration!)
+ * @param currentTime - Player position (erela.js Player, player.position)
+ * @param size - Size of the string (Recommend 10 so bot can handle well)
+ * @returns {String} - The bar <Formatted into a discord block quote.>
+ */
 
-    const emptyProgress = startTime - progress;
+export async function progressBar(endTime: number, currentTime: number, size: number): Promise<string> {
+    const BarCal = currentTime / endTime;
+    const progress = Math.round((size * BarCal));
+    const emptyProgress = size - progress;
 
-    const ProgressText = '▇'.repeat(progress);
-    const emptyProgressText = '—'.repeat(emptyProgress);
-
-    const bar = `\`\`${sortTime(currentTime)} <${ProgressText + emptyProgressText}> ${sortTime(endTime)}\`\``
-    return bar
+    const progressText = '▇'.repeat(progress);
+    const emptyProgressText = '-'.repeat(emptyProgress);
+    
+    const bar = `\`\`${sortTime(currentTime)} <${progressText + emptyProgressText}> ${sortTime(endTime)}\`\``;
+    return bar;
 }

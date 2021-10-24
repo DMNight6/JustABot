@@ -1,6 +1,6 @@
 import discord from 'discord.js' // Discord.
 import { ICommand, IEvent } from "../interface";
-import { readdirSync } from 'fs';
+import { readdirSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import Logger from './Logger';
 import { Manager } from 'erela.js';
@@ -63,9 +63,46 @@ class Core extends discord.Client {
         }
     }
 
+    /**
+     * 
+     * @param id - Guild id (discord.js Guild, .id)
+     * @returns {String} - Prefix.
+     */
+
     public async getPrefix(id: string): Promise<string> {
         const guild_prefix = require(resolve(__dirname, '..', 'guild_prefix.json'))
         return guild_prefix[id]?.gprefix
+    }
+
+    /**
+     * 
+     * @param id -  Guild id (discord.js Guild, .id)
+     * @param prefix - Sets the prefix of the guild to defined prefix
+     * @returns {File}
+     */
+
+    public async configPrefix(id: string, prefix: string): Promise<void> {
+        const guild_prefix = require(resolve(__dirname, '..', 'guild_prefix.json'))
+
+        if(!guild_prefix[id]) {
+            guild_prefix[id] = {
+                gprefix: prefix
+            }
+        }
+
+        return writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify(guild_prefix, null, 2))
+    }
+
+    /**
+     * 
+     * @param id - Guild id (discord.js Guild, .id)
+     * @returns {File}
+     */
+    
+    public async deletePrefix(id: string): Promise<void> {
+        const guild_prefix = require(resolve(__dirname, '..',  'guild_prefix.json'));
+        delete(guild_prefix[id])
+        return  writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify(guild_prefix, null, 2))
     }
 
     public async connect(): Promise<string> {
