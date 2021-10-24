@@ -15,7 +15,11 @@ const MessageCreateEvent: IEvent = {
             .split(/\s+/);
         const command = client.commands.get(name.toLowerCase()) || client.cmdAlias.get(name.toLowerCase())
         if (!command) return;
-        await command.run(client, message, args)
+        if (command.perms) { // This is ran when command.perms exist on the command requested
+            const MemberPerms = message.member?.permissions
+            if (!MemberPerms || !MemberPerms.has(command.perms)) return message.channel.send('You cannot do this!')
+            else await command.run(client, message, args);
+        } else await command.run(client, message, args)
     }
 }
 

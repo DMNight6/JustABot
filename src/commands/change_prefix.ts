@@ -6,6 +6,7 @@ const ChangePrefixCommand: ICommand = {
     desc: "Change the server prefix",
     category: 'Management',
     usage: '<new prefix>',
+    perms: ['MANAGE_GUILD'],
     alias: ['cprefix'],
     run: async(client, message, args) =>  {
         if (!args.length) return message.channel.send('Args cannot be empty');
