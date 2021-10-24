@@ -48,7 +48,6 @@ class Core extends discord.Client {
     }
     
     /* Changed how commands are loaded. */
-    /* Slash command support coming soon */
     private async importCommands(): Promise<void> {
         const CommandFiles = readdirSync(resolve(__dirname, '..', 'commands')).filter(file => file.endsWith('.ts'))
         for (const file of CommandFiles) {
