@@ -5,6 +5,7 @@ const NowPlayingCommand: ICommand = {
     name: 'nowplaying',
     desc: 'Get what music is playing at the mean time.',
     category: 'Music',
+    usage: 'None',
     alias: ['np'],
     run: async(client, message, args) => {
         const player = client.Music.get(message.guild?.id!);

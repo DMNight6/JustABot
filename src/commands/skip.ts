@@ -5,6 +5,7 @@ const SkipCommand: ICommand = {
     name: 'skip',
     desc: 'Skip songs or tracks.',
     category: 'Music',
+    usage: '[None/number]',
     run: async(client, message, args) => {
         const player = client.Music.get(message.guild?.id!)
         const song = player?.queue.current

@@ -7,6 +7,7 @@ const QueueCommand: ICommand = {
     name: 'queue',
     desc: 'Displays the queue',
     category: 'Music',
+    usage: '[num/None]',
     run: async(client, message, args) => {
         const player = client.Music.get(message.guild?.id!);
         const reactions = ['⬅', '➡'];

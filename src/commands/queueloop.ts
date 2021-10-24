@@ -4,6 +4,7 @@ const QueueLoopCommand: ICommand = {
     name: 'queueloop',
     desc: 'Loop the queue',
     category: 'Music',
+    usage: 'None',
     run: async(client, message, args) => {
         const player = client.Music.get(message.guild?.id!);
         if (!player) return message.channel.send(`There is no player available in this guild (yet)`)

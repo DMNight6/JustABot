@@ -4,6 +4,7 @@ const LoopCommand: ICommand = {
     name: 'loop',
     desc: 'This enable looping for current track.',
     category: 'Music',
+    usage: 'None',
     run: async(client, message) => {
         let player = client.Music.get(message.guild?.id!);
 

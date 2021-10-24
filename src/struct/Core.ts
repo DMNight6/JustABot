@@ -64,7 +64,7 @@ class Core extends discord.Client {
     }
 
     /**
-     * 
+     * Gets the prefix with the [id] provided 
      * @param id - Guild id (discord.js Guild, .id)
      * @returns {String} - Prefix.
      */
@@ -75,7 +75,7 @@ class Core extends discord.Client {
     }
 
     /**
-     * 
+     * Add prefix if guild doesn't exist withn the file
      * @param id -  Guild id (discord.js Guild, .id)
      * @param prefix - Sets the prefix of the guild to defined prefix
      * @returns {File}
@@ -94,7 +94,7 @@ class Core extends discord.Client {
     }
 
     /**
-     * 
+     * Deletes guild info from file
      * @param id - Guild id (discord.js Guild, .id)
      * @returns {File}
      */
@@ -103,6 +103,23 @@ class Core extends discord.Client {
         const guild_prefix = require(resolve(__dirname, '..',  'guild_prefix.json'));
         delete(guild_prefix[id])
         return  writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify(guild_prefix, null, 2))
+    }
+
+    /**
+     * Change Prefix from guild provided to file
+     * @param id - Guild id (discord.js Guild, .id)
+     * @param prefix - Guild Prefix To Set
+     * @returns {File}
+     */
+    public async chgPrefix(id: string, prefix: string): Promise<void> {
+        const guild_prefix = require(resolve(__dirname, '..', 'guild_prefix.json'))
+        if (guild_prefix[id]) {
+            this.deletePrefix(id)
+        }           
+        guild_prefix[id] =  {
+                gprefix: prefix
+            };
+        return writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify(guild_prefix, null, 2));
     }
 
     public async connect(): Promise<string> {

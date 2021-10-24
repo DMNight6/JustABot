@@ -5,6 +5,7 @@ const GetGuildInfoCommand: ICommand = {
     name: 'getguild',
     desc: 'Get information about this guild',
     category: 'Information',
+    usage: 'None',
     run: async(client, message, args) => {
         const Embed = new MessageEmbed();
         Embed.setAuthor(`Guild Info • ${message.guild?.name}`, message.guild?.iconURL({dynamic: true})!)

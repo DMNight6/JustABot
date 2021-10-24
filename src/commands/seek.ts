@@ -5,15 +5,16 @@ const SeekCommand: ICommand = {
     name: 'seek',
     desc: 'Seek the position of desired time of track.',
     category: "Music",
+    usage: '[Time (1m20s/1m20)]',
     run: async (client, message, args) => {
         const match = args.toLocaleString().match(stringMatch);
         const timeArray = []
         if (!match) return message.channel.send('Invalid time string');
 
-        if (match[1] !== undefined && match[3] !== undefined) {
+        if (match[0] === args.toLocaleString() && match[1] !== undefined && match[3] !== undefined) {
             let time = +match[1] * 60 * 1000 + +match[3]*1000
             timeArray.push(time)
-        } else if (match[1] !== undefined) {
+        } else if (match[0] === args.toLocaleString() && match[1] !== undefined) {
             let time = +match[1] * 1000
             timeArray.push(time) 
         }

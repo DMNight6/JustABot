@@ -13,7 +13,7 @@ async function cronTask(url: string, dest: string, func: Function) {
 
     await axios.get(url, {responseType: 'stream'})
         .then(async(res) => {
-            res.data.pipe(file)
+            // res.data.pipe(file)
             file.on('finish', async () => {
                 Logger.info(`Successed download Lavalink.jar. Starting...`)
                 file.close()

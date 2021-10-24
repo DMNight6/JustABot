@@ -5,6 +5,7 @@ const TestCommand: ICommand = {
     desc: 'Testing if bot command loaded sucessfully',
     category: 'Dev',
     alias: [],
+    usage: 'None',
     run: async (client, message) => {
         message.channel.send('Successfully called TEST command.')
     }

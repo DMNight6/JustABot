@@ -7,6 +7,7 @@ const DynamicHelpCommand: ICommand = {
     name: 'help',
     desc: 'Get a list of commands',
     category: 'Information',
+    usage: '[None/command name]',
     alias: ['h'],
     run: async(client, message, args) => {
         const prefix = await client.getPrefix(message.guild?.id!) || '$';
@@ -23,10 +24,11 @@ const DynamicHelpCommand: ICommand = {
                 .setColor('GREY');
                 for (const category in fields) {
                     const commands = fields[category];
-                    embed.addField(category, commands.map((cmd) => `\`${prefix}${cmd.name} • ${cmd.desc}\``).join('\n'));
+                    embed.addField(category, commands.map((cmd) => `\`${prefix}${cmd.name} ${cmd.usage}\` • ${cmd.desc}`).join('\n'));
                 }
             return message.channel.send({embeds: [embed]})
         }
+
     }
 }
 

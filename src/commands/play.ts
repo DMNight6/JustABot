@@ -5,6 +5,7 @@ const PlayCommand: ICommand = {
     name: 'play',
     desc: 'Play the music with search based args or yt links.',
     category: 'Music',
+    usage: '<Search Terms/Link>',
     alias: ['p'],
     run: async(client, message, args) => {
         if (!args.length) return message.channel.send(`You need to send a url or a search based argument!`)

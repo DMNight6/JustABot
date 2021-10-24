@@ -5,6 +5,7 @@ const SearchCommand: ICommand = {
     name: 'search',
     desc: 'Search Music with the value provided',
     category: 'Music',
+    usage: 'None',
     run: async(client, message, args) => {
         if (!args.length) return message.channel.send(`You need to send a search based argument!`)
         if (!message.member!.voice.channel) return message.channel.send(`You need to be in a voice channel to do this!`)
