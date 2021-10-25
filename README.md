@@ -1,5 +1,6 @@
 # JustABot
  Just a bot that I [live stream](https://twitch.tv/dmnight6) at :D
+ [This is a rewrite from python to typescript]
 
 ## Setup
 1. Install the required dependecies
