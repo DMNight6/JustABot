@@ -4,8 +4,9 @@
 ## Setup
 1. Install the required dependecies
 
-    You will need •\n
-        [Node 16+ with NPM selected](https://nodejs.org/en/)
+    You will need •
+    
+    [Node 16+ with NPM selected](https://nodejs.org/en/)
     
 
     After installing, do: `<npm install>` (Make sure you are in the correct bot directory)
