@@ -6,7 +6,7 @@
 
     You will need:
 
-        [Node 16+ With NPM selection selected](https://nodejs.org/en/)
+        [Node 16+ with NPM installed](https://nodejs.org/en/)
 
     After installing, do: `<npm install>` (Make sure you are in the correct bot directory)
 
