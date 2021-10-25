@@ -62,8 +62,9 @@ class Core extends discord.Client {
         }
     }
 
-    private async FileCheck(): Promise<void> { // Check if file exist
+    private async FileCheck(): Promise<void | number> { // Check if file exist
         if (!existsSync(resolve(__dirname, '..', 'guild_prefix.json'))) return writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify({}, null, 0));
+        else return 0
     }
 
     /**
@@ -126,11 +127,11 @@ class Core extends discord.Client {
     }
 
     public async connect(): Promise<string> {
-        await this.FileCheck();
-        await this.importEvents();
-        await this.importManagerEvent();
-        await this.importCommands();
-        return this.login(this.token)
+        await this.FileCheck(); // Check file #L65
+        await this.importEvents(); // Import Client Events #L32
+        await this.importManagerEvent(); // Import Erela Manager Events #L42
+        await this.importCommands(); // Load Commands #L51
+        return this.login(this.token) // Returns BaseClient
     }
 }
 
