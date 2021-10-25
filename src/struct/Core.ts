@@ -1,6 +1,6 @@
 import discord from 'discord.js' // Discord.
 import { ICommand, IEvent } from "../interface";
-import { readdirSync, writeFileSync } from 'fs';
+import { readdirSync, writeFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import Logger from './Logger';
 import { Manager } from 'erela.js';
@@ -60,6 +60,10 @@ class Core extends discord.Client {
                 })
             }
         }
+    }
+
+    private async FileCheck(): Promise<void> { // Check if file exist
+        if (!existsSync(resolve(__dirname, '..', 'guild_prefix.json'))) return writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify({}, null, 0));
     }
 
     /**
@@ -122,6 +126,7 @@ class Core extends discord.Client {
     }
 
     public async connect(): Promise<string> {
+        await this.FileCheck();
         await this.importEvents();
         await this.importManagerEvent();
         await this.importCommands();

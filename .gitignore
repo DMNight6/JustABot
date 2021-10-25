@@ -5,3 +5,4 @@ data.ts
 .env
 Lavalink.jar
 application.yml
+guild_prefix.json
