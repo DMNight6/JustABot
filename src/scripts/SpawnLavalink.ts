@@ -5,15 +5,28 @@ import { spawn } from 'child_process';
 import { resolve } from 'path';
 
 /* Script Rewrite */
+function isObject(val: any) {
+    return val !== null  && typeof val === 'object';
+}
 
+function isFunction(val: any) {
+    return toString.call(val) === '[object Function]';
+}
 
+function isStream(val: any) {
+    return isObject(val) && isFunction(val.pipe);
+}
 
-async function cronTask(url: string, dest: string, func: Function) {
+function checkIfXisStream(val: any) {
+    if (isStream(val)) return val
+}
+
+async function cronTask(url: string, dest: string, func: Function): Promise<void> {
     const file = fs.createWriteStream(dest);
-
     await axios.get(url, {responseType: 'stream'})
-        .then(async(res) => {
-            // res.data.pipe(file)
+        .then(res => checkIfXisStream(res.data))
+        .then(async(data) => {
+            data.pipe(file)
             file.on('finish', async () => {
                 Logger.info(`Successed download Lavalink.jar. Starting...`)
                 file.close()
@@ -27,7 +40,7 @@ async function cronTask(url: string, dest: string, func: Function) {
 };
 
 async function spawnLv() {
-    const child = spawn(`Java`, [`-Jar`, resolve(__dirname, '..', 'Lavalink', 'Lavalink.jar')])
+    const child = spawn(`Java`, [`-jar`, resolve(__dirname, '..', 'Lavalink', 'Lavalink.jar')])
 
     child.on('message', (message) => {
         Logger.info(`${message}`)
