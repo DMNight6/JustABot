@@ -27,7 +27,7 @@ const QueueCommand: ICommand = {
         });
 
         const filter = (reaction: MessageReaction, user: User) => reactions.includes(reaction.emoji.name!) && user.id === message.author.id;
-        let collector = sendEmbed.createReactionCollector({ filter: filter, time: 60000 })
+        let collector = sendEmbed.createReactionCollector({ filter: filter, time: 60_000 })
 
         collector.on('collect', async(reaction) => {
             switch(reaction.emoji.name) {

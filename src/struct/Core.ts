@@ -100,7 +100,7 @@ class Core extends discord.Client {
     /**
      * Deletes guild info from file
      * @param id - Guild id (discord.js Guild, .id)
-     * @returns {File}
+     * @returns {File} - Not exactly, this returns the edited file [Usable at anytime]
      */
     
     public async deletePrefix(id: string): Promise<void> {
