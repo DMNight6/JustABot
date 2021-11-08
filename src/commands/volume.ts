@@ -5,6 +5,7 @@ const VolumeCommand: ICommand = {
     desc: 'Configure the player volume',
     category: 'Music',
     usage: '<value | 100 <= x > -1 |>',
+    alias: ['v', 'vol'],
     run: async(client, message, args) => {
         const player = client.Music.get(message.guild?.id!)
 
