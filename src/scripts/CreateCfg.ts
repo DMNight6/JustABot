@@ -11,7 +11,7 @@ const LavalinkConfig = {
 
     lavalink: {
         server: {
-            password: `"${CONFIG.LAVALINK.password}"`,
+            password: CONFIG.LAVALINK.password,
             sources: {
                 youtube: true,
                 bandcamp: true,
@@ -42,8 +42,8 @@ const LavalinkConfig = {
 
 const Formatting = yaml.stringify(LavalinkConfig, {indent: 5}); // Formatting of the file
 
-fs.writeFileSync(path.resolve(__dirname, "..", "Lavalink", "application.yml"), Formatting) // Wrtie when this file ran by manual.
+fs.writeFileSync(path.resolve(__dirname, "Lavalink", "application.yml"), Formatting) // Wrtie when this file ran by manual.
 
 export async function createcfg(): Promise<void> {
-    return fs.writeFileSync(path.resolve(__dirname, "..", "Lavalink", "application.yml"), Formatting)
+    return fs.writeFileSync(path.resolve(__dirname, "application.yml"), Formatting)
 } // Will be used in SpawnLavalink.ts

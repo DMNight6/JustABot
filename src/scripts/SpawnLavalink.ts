@@ -3,8 +3,9 @@ import fs from 'fs';
 import Logger from '../struct/Logger';
 import { spawn } from 'child_process';
 import { resolve } from 'path';
+import { createcfg } from './CreateCfg'
 
-/* Script Rewrite */
+/* Function Checker, these parts can be found on axios repo */
 function isObject(val: any) {
     return val !== null  && typeof val === 'object';
 }
@@ -20,7 +21,9 @@ function isStream(val: any) {
 function checkIfXisStream(val: any) {
     if (isStream(val)) return val
 }
+/* End of Function Checker */
 
+/* Script Rewrite */
 async function cronTask(url: string, dest: string, func: Function): Promise<void> {
     const file = fs.createWriteStream(dest);
     await axios.get(url, {responseType: 'stream'})
@@ -40,7 +43,14 @@ async function cronTask(url: string, dest: string, func: Function): Promise<void
 };
 
 async function spawnLv() {
-    const child = spawn(`Java`, [`-jar`, resolve(__dirname, '..', 'Lavalink', 'Lavalink.jar')])
+    if (!fs.existsSync(resolve(__dirname, 'application.yml'))) await createcfg();
+
+    const child = spawn(`java`, ['-jar', resolve(__dirname, 'Lavalink', 'Lavalink.jar')])
+
+    child.stdout.setEncoding('utf-8')
+    child.stderr.setEncoding('utf-8')
+
+    child.on('spawn', () => Logger.info('Successfully started Lavalink!'));
 
     child.on('message', (message) => {
         Logger.info(`${message}`)
@@ -61,7 +71,7 @@ axios.get("https://api.github.com/repos/freyacodes/Lavalink/releases/latest", {r
     .then(json => {
         if(json.assets[0] && json.assets[0].browser_download_url){
             Logger.info("Found: "+json.assets[0].browser_download_url)
-            cronTask(json.assets[0].browser_download_url, resolve(__dirname, '..', 'Lavalink', 'Lavalink.jar'), spawnLv)
+            cronTask(json.assets[0].browser_download_url, resolve(__dirname, 'Lavalink', 'Lavalink.jar'), spawnLv)
         }else{
             Logger.warn("Could not find .jar for latest release!")
             Logger.warn("Attempting to download previous release...")
@@ -73,7 +83,7 @@ axios.get("https://api.github.com/repos/freyacodes/Lavalink/releases/latest", {r
 
             let priorDL_URL = `https://github.com/freyacodes/Lavalink/releases/download/${priorVersion}/Lavalink.jar`
             Logger.info("Found: " + priorDL_URL.toString())
-            cronTask(priorDL_URL, resolve(__dirname, '..', 'Lavalink', 'Lavalink.jar'), spawnLv)
+            cronTask(priorDL_URL, resolve(__dirname, 'Lavalink', 'Lavalink.jar'), spawnLv)
         }
     })
     .catch(err =>{
