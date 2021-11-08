@@ -1,11 +1,11 @@
 import { ICommand, sortRegArray } from "../interface";
 
-const stringMatch = /([0-9]{1,2})[:hms](([0-9]{1,2})[:m]?)?(([0-9]{1,2})s?)?/
+const stringMatch = /([0-9]{1,2})[:ms](([0-9]{1,2})s?)?/
 const SeekCommand: ICommand = {
     name: 'seek',
     desc: 'Seek the position of desired time of track.',
     category: "Music",
-    usage: '[Time (2h1m2s/1m20s/1s)]',
+    usage: '[Time (1m1s/1m/1s/1)]',
     run: async (client, message, args) => {
         let match = args.toLocaleString().match(stringMatch); // Match string with RegExp. ^RegExp. #L3 (RegExp)^
 
@@ -15,10 +15,6 @@ const SeekCommand: ICommand = {
 
         /* Rewrite Time Sorting */
         switch (filterMatch.length) {
-            case 6:
-                let hmstime = +filterMatch[1] * 360 * 1000 + +filterMatch[3] * 60 * 1000 + +filterMatch[5] * 1000
-                ovableTime = hmstime;
-                break;
             case 4:
                 let mstime = +filterMatch[1] * 60 * 1000 + +filterMatch[3] * 1000
                 ovableTime = mstime;
