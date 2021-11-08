@@ -18,7 +18,7 @@ function isStream(val: any) {
     return isObject(val) && isFunction(val.pipe);
 }
 
-function checkIfXisStream(val: any) {
+function checkIfAxiosResIsStream(val: any) {
     if (isStream(val)) return val
 }
 /* End of Function Checker */
@@ -27,7 +27,7 @@ function checkIfXisStream(val: any) {
 async function cronTask(url: string, dest: string, func: Function): Promise<void> {
     const file = fs.createWriteStream(dest);
     await axios.get(url, {responseType: 'stream'})
-        .then(res => checkIfXisStream(res.data))
+        .then(res => checkIfAxiosResIsStream(res.data))
         .then(async(data) => {
             data.pipe(file)
             file.on('finish', async () => {
@@ -52,12 +52,12 @@ async function spawnLv() {
 
     child.on('spawn', () => Logger.info('Successfully started Lavalink!'));
 
-    child.on('message', (message) => {
-        Logger.info(`${message}`)
+    child.stdout.on('data', (data) => {
+        Logger.info(`${data}`)
     })
 
-    child.on('error', (error) => {
-        Logger.error(`${error.message}`)
+    child.stderr.on('data', (data) => {
+        Logger.error(`${data}`)
     })
 
     child.on('exit', (code) => {
