@@ -33,7 +33,7 @@ const SeekCommand: ICommand = {
         const player = client.Music.get(message.guild?.id!)
         if (!player) return message.channel.send('This guild doesn\'t have any player (yet)')
 
-        if (player.queue.current?.duration! > ovableTime && ovableTime > -1) { // When ovableTime is less or equal than -1 || ovableTime is > than current track duration, this function is skipped and moved to else part.
+        if (player.queue.current?.duration! > ovableTime && ovableTime > -1 && player.queue.current?.isStream) { // When ovableTime is less or equal than -1 || ovableTime is > than current track duration || current track is stream, this function is skipped and moved to else part.
             player.seek(ovableTime)
             message.channel.send(`Seeked to ${args.toString()}`)
         } else return message.channel.send(`Invalid time range!`)
