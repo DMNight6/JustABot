@@ -12,7 +12,8 @@ const MessageCreateEvent: IEvent = {
         if(!message.content.startsWith(prefix)) return;
         const [name, ...args] = message.content
             .slice(prefix.length)
-            .split(/\s+/);
+            .trim()
+            .split(/ +/g);
         const command = client.commands.get(name.toLowerCase()) || client.cmdAlias.get(name.toLowerCase())
         if (!command) return;
         if (command.perms) { // This is ran when command.perms exist on the command requested
