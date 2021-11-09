@@ -26,7 +26,6 @@ class Core extends discord.Client {
     }
 
     public commands: discord.Collection<string, ICommand> = new discord.Collection(); /* This is the commands collection.*/
-    public cmdAlias: discord.Collection<string, ICommand> = new discord.Collection(); /* This is aliases collection for commands. */
 
     /* This imports the event from events/client and loads it on this */
     private async importEvents(): Promise<void> {
@@ -53,12 +52,6 @@ class Core extends discord.Client {
         for (const file of CommandFiles) {
             const command = ( await import(resolve(__dirname, '..', 'commands', file)) ).default;
             this.commands.set(command.name.toLowerCase() /* Fix command being uppercase and make you go insane */, command) // This creates a Map consisting the key and value.
-            
-            if(command?.alias?.length !== 0) {
-                command.alias?.forEach((alias: string) => {
-                    this.cmdAlias.set(alias, command)
-                })
-            }
         }
     }
 

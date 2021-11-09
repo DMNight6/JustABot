@@ -2,7 +2,7 @@ import { ICommand } from "../interface";
 
 const QueueLoopCommand: ICommand = {
     name: 'queueloop',
-    desc: 'Loop the queue',
+    desc: 'Loop the queue. (Toggle type.)',
     category: 'Music',
     usage: 'None',
     run: async(client, message, args) => {

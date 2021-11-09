@@ -6,7 +6,7 @@ const CalcCommand: ICommand = {
     name: 'calculate',
     desc: 'Calculate with basic math',
     usage: '<1 + 10 (can be other things)>',
-    category: 'Fun',
+    category: 'Math',
     alias: ['calc'],
     run: async(client, message, args) => {
         try {
@@ -22,3 +22,8 @@ const CalcCommand: ICommand = {
 }
 
 export default CalcCommand
+
+/* 
+    This is calculation for basic math. (Math calculation are following the order of operations.)
+    Algebra will be another command.
+*/

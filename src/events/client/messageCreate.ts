@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import { ICommand, IEvent } from "../../interface";
 
 const MessageCreateEvent: IEvent = {
-    name: 'messageCreate',
+    name: 'messageCreate', // Event called when a message is sent to a channel.
     once: false,
     run: async(client, message: Message) => {
         if (!message.content || message.author.bot || !message.guild) return;
@@ -14,7 +14,7 @@ const MessageCreateEvent: IEvent = {
             .slice(prefix.length)
             .trim()
             .split(/ +/g);
-        const command = client.commands.get(name.toLowerCase()) || client.cmdAlias.get(name.toLowerCase())
+        const command = client.commands.get(name.toLowerCase()) || client.commands.find(cmd => cmd.alias?.includes(name.toLowerCase())!) // Change alias fetch to a optimized version :D
         if (!command) return;
         if (command.perms) { // This is ran when command.perms exist on the command requested
             const MemberPerms = message.member?.permissions

@@ -9,7 +9,7 @@ const SearchCommand: ICommand = {
     run: async(client, message, args) => {
         if (!args.length) return message.channel.send(`You need to send a search based argument!`)
         if (!message.member!.voice.channel) return message.channel.send(`You need to be in a voice channel to do this!`)
-        let searchTerms = args.toString();
+        let searchTerms = args.join(" ").toString();
         let player = client.Music.get(message.guild?.id!);
 
         if (!player) {

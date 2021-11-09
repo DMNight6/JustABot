@@ -34,7 +34,7 @@ const PlayCommand: ICommand = {
             result = await player.search(args[0], message.author.id)
         } else {
             result = await player.search({
-                query: args.toString(),
+                query: args.join(" ").toString(),
                 source: 'youtube'
             }, message.author.id)
         }

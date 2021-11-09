@@ -2,7 +2,7 @@ import { ICommand } from "../interface";
 
 const LoopCommand: ICommand = {
     name: 'loop',
-    desc: 'This enable looping for current track.',
+    desc: 'This enable looping for current track. (Toggle type.)',
     category: 'Music',
     usage: 'None',
     run: async(client, message) => {
