@@ -1,7 +1,7 @@
 /* Queue command rewrite */
 import { MessageEmbed, MessageReaction, User } from "discord.js";
 import { Queue } from "erela.js";
-import { ICommand } from "../interface";
+import { ICommand } from "../../interface";
 
 const QueueCommand: ICommand = {
     name: 'queue',

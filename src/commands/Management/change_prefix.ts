@@ -1,5 +1,5 @@
 import { User } from "discord.js";
-import { ICommand } from "../interface";
+import { ICommand } from "../../interface";
 
 const ChangePrefixCommand: ICommand = {
     name: 'change_prefix',

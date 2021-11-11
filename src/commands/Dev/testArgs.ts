@@ -1,4 +1,4 @@
-import { ICommand } from "../interface";
+import { ICommand } from "../../interface";
 
 const TestArgsEvent: ICommand = {
     name: 'testargs',

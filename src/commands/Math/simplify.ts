@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { simplify } from "mathjs";
-import { ICommand } from "../interface";
+import { ICommand } from "../../interface";
 
 const SimplifyCommand: ICommand = {
     name: 'simplify',

@@ -1,9 +1,10 @@
 import discord from 'discord.js' // Discord.
-import { ICommand, IEvent } from "../interface";
+import { ICommand } from "../interface";
 import { readdirSync, writeFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import Logger from './Logger';
 import { Manager } from 'erela.js';
+import filterPlugins from 'erela.js-filter';
 
 class Core extends discord.Client {
 
@@ -18,6 +19,7 @@ class Core extends discord.Client {
         this.token = token;
         this.Music = new Manager({
             ...erela_config,
+            plugins: [new filterPlugins()],
             send: (id, payload) => {
                 const guild = this.guilds.cache.get(id)
                 if (guild) guild.shard.send(payload)
@@ -47,11 +49,15 @@ class Core extends discord.Client {
     }
     
     /* Changed how commands are loaded. */
+    /* V2 Command loading */
     private async importCommands(): Promise<void> {
-        const CommandFiles = readdirSync(resolve(__dirname, '..', 'commands')).filter(file => file.endsWith('.ts'))
-        for (const file of CommandFiles) {
-            const command = ( await import(resolve(__dirname, '..', 'commands', file)) ).default;
-            this.commands.set(command.name.toLowerCase() /* Fix command being uppercase and make you go insane */, command) // This creates a Map consisting the key and value.
+        const CommandFolder = readdirSync(resolve(__dirname, '..', 'commands'))
+        for (const folder of CommandFolder) {
+            const CommandFiles = readdirSync(resolve(__dirname, '..', 'commands', folder)).filter(file => file.endsWith('.ts'))
+            for (const file of CommandFiles) {
+                const command = ( await import(resolve(__dirname, '..', 'commands', folder, file)) ).default;
+                this.commands.set(command.name.toLowerCase() /* Fix command being uppercase and make you go insane */, command) // This creates a Map consisting the key and value.
+            }
         }
     }
 

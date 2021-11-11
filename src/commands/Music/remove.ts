@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { ICommand } from "../interface";
+import { ICommand } from "../../interface";
 
 const RemoveCommand: ICommand = {
     name: 'remove',

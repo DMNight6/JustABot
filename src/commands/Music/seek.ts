@@ -1,4 +1,4 @@
-import { ICommand, sortRegArray } from "../interface";
+import { ICommand, sortRegArray } from "../../interface";
 
 const stringMatch = /([0-9]{1,2})[:ms](([0-5]?[0-9]{1,2})s?)?/ // Edit RegExp to limit seconds to 59s only.
 

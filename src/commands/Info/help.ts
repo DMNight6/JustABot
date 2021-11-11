@@ -1,7 +1,7 @@
 /* Dynamic help command 131021*/
 import { EmbedFieldData, Formatters, MessageEmbed, MessageReaction, User } from "discord.js";
 import { info } from "winston";
-import { ICommand } from "../interface";
+import { ICommand } from "../../interface";
 
 const DynamicHelpCommand: ICommand = {
     name: 'help',

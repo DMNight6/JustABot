@@ -1,4 +1,4 @@
-import { ICommand } from "../interface";
+import { ICommand } from "../../interface";
 
 const TestCommand: ICommand = {
     name: 'test',

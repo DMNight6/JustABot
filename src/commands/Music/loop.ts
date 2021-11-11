@@ -1,11 +1,11 @@
-import { ICommand } from "../interface";
+import { ICommand } from "../../interface";
 
 const LoopCommand: ICommand = {
     name: 'loop',
     desc: 'This enable looping for current track. (Toggle type.)',
     category: 'Music',
     usage: 'None',
-    run: async(client, message) => {
+    run: async(client, message, args) => {
         let player = client.Music.get(message.guild?.id!);
 
         if (!player) return message.channel.send(`This guild doesn't have a guild (yet)`);

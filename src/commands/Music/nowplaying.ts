@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { ICommand, progressBar } from "../interface";
+import { ICommand, progressBar } from "../../interface";
 
 const NowPlayingCommand: ICommand = {
     name: 'nowplaying',

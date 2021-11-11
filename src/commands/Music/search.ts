@@ -1,5 +1,5 @@
 import { Message, MessageEmbed, User } from "discord.js";
-import { ICommand } from "../interface";
+import { ICommand } from "../../interface";
 
 const SearchCommand: ICommand = {
     name: 'search',
