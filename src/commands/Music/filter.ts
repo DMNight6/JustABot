@@ -2,9 +2,10 @@ import { Message } from "discord.js";
 import { Player } from "erela.js";
 import { ICommand } from "../../interface";
 
-interface FilterStrcuture {
+interface FilterDataStrcuture {
     [key: string]: Function
 }
+
 const FilterCommand: ICommand = {
     name: 'filter',
     desc: 'Enables a certain filter for all tracks',
@@ -16,7 +17,7 @@ const FilterCommand: ICommand = {
         if (!player) return message.channel.send('There is no player in this guild (yet)')
         if (!player.queue.current) return message.channel.send(`There is no music playin atm.`)
 
-        const FilterData: FilterStrcuture = {
+        const FilterData: FilterDataStrcuture = {
             nightcore: () => {
                 if (player?.filters.nightcore) return -1;
                 else return player!.setNightcore(true)
