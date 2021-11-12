@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import { Player } from "erela.js";
 import { ICommand } from "../../interface";
 
@@ -13,10 +13,16 @@ const FilterCommand: ICommand = {
     usage: '<>|[clear]',
     run: async(client, message, args) => {
         let player = client.Music.get(message.guild?.id!)
-        let name = args[0].toLowerCase()
+        
         if (!player) return message.channel.send('There is no player in this guild (yet)')
         if (!player.queue.current) return message.channel.send(`There is no music playin atm.`)
 
+        const Embed = new MessageEmbed()
+            .setAuthor(`Available Filters`, client.user?.avatar!)
+            .setDescription(Object.keys(player.filters).map(key => key).join('\n'))
+        if (!args.length) return message.channel.send({embeds: [Embed]});
+
+        let name = args[0].toLowerCase()
         const FilterData: FilterDataStrcuture = {
             nightcore: () => {
                 if (player?.filters.nightcore) return -1;
@@ -38,6 +44,26 @@ const FilterCommand: ICommand = {
                 if (player?.filters.trebblebass) return -1;
                 else return player!.setTrebbleBass(true);
             },
+            soft: () => {
+                if (player?.filters.soft) return -1
+                else return player!.setSoft(true)
+            },
+            tremolo: () => {
+                if (player?.filters.tremolo) return -1
+                else return player!.setTremolo(true)
+            },
+            earrape: () => {
+                if (player?.filters.earrape) return -1
+                else return player!.setEarrape(true)
+            },
+            pop: () => {
+                if (player?.filters.pop) return -1
+                else return player!.setPop(true)
+            },
+            vaporwave: () => {
+                if (player?.filters.vaporwave) return -1
+                else return player!.setVaporwave(true)
+            }
         }
 
         if (name == 'clear' && Object.values(player.filters).includes(true)) {
