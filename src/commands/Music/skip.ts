@@ -8,15 +8,16 @@ const SkipCommand: ICommand = {
     usage: '[None/number]',
     run: async(client, message, args) => {
         const player = client.Music.get(message.guild?.id!)
+        if (!player) return message.channel.send('There is no player for this guild (yet)')
         const song = player?.queue.current
         if (isNaN(+args[0])) args = [];
         if (!args.length) { 
-            player?.stop() 
+            player.stop() 
             message.channel.send({embeds: [new MessageEmbed().setDescription(`Successfully skipped [${song?.title}](${song?.uri})`)]})
-        } else {
+        } else if (+args[0] < player.queue.length) {
             player?.stop(+args[0])
-            message.channel.send({embeds: [new MessageEmbed().setDescription(`Successfully skipped ${+args} songs`)]})
-        }
+            message.channel.send({embeds: [new MessageEmbed().setDescription(`Successfully skipped ${+args[0]} songs`)]})
+        } else return message.channel.send('Value is out of range')
     }
 }
 

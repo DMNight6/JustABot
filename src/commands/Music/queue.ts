@@ -61,8 +61,9 @@ async function GetEmbedInList(queue: Queue): Promise<Array<MessageEmbed>> { // F
     for(let item = 0; item < queue.length; item += 10) {
         const current = queue.slice(item, itemInAPage)
         itemInAPage += 10
+        let count = item;
 
-        let info = current.map((track, count) => `[${++count} • ${track.title}](${track.uri})\nRequested By • <@${track.requester}>`).join('\n'); // removed count and added in here. Why? (callbackfn: value: unknown, index: number ...)[cool right?])
+        let info = current.map((track) => `[${++count} • ${track.title}](${track.uri})\nRequested By • <@${track.requester}>`).join('\n'); // removed count and added in here. Why? (callbackfn: value: unknown, index: number ...)[cool right?])
         const embeds = new MessageEmbed() // Create a embed
             .setDescription(`[Now Playing • ${queue.current?.title}](${queue.current?.uri})\n\n${info}`); // Sets description
 
