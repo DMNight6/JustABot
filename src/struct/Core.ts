@@ -1,6 +1,7 @@
 import discord from 'discord.js' // Discord.
 import { ICommand } from "../interface";
 import { readdirSync, writeFileSync, existsSync } from 'fs';
+import chokidar from 'chokidar';
 import { resolve } from 'path';
 import Logger from './Logger';
 import { Manager } from 'erela.js';
@@ -29,7 +30,7 @@ class Core extends discord.Client {
 
     public commands: discord.Collection<string, ICommand> = new discord.Collection(); /* This is the commands collection.*/
 
-    /* This imports the event from events/client and loads it on this */
+    /* Import events (Merged Client and Manager.) */
     private async importEvents(): Promise<void> {
         const EventFiles = readdirSync(resolve(__dirname, '..', 'events', 'client')).filter(file => file.endsWith('.ts'))
         for (const file of EventFiles) {
@@ -37,10 +38,7 @@ class Core extends discord.Client {
             if (Event.once) this.once(Event.name, (...args) => Event.run(this, ...args))
             else this.on(Event.name, (...args) => Event.run(this, ...args))
         }
-    }
 
-    /* This imports the event from events/manager and loads it on this.Music */
-    private async importManagerEvent(): Promise<void> {
         const EventFileManager = readdirSync(resolve(__dirname, '..', 'events', 'manager')).filter(file => file.endsWith('.ts'))
         for (const file of EventFileManager) {
             const MEvent = (await import(resolve(__dirname, '..', 'events', 'manager', file))).default;
@@ -127,8 +125,7 @@ class Core extends discord.Client {
 
     public async connect(): Promise<string> {
         await this.FileCheck(); // Check file #L65
-        await this.importEvents(); // Import Client Events #L32
-        await this.importManagerEvent(); // Import Erela Manager Events #L42
+        await this.importEvents(); // Import Events from Client and Manager #L33
         await this.importCommands(); // Load Commands #L51
         return this.login(this.token) // Returns BaseClient
     }

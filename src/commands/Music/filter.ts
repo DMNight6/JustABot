@@ -26,49 +26,66 @@ const FilterCommand: ICommand = {
         const FilterData: FilterDataStrcuture = {
             nightcore: () => {
                 if (player?.filters.nightcore) return -1;
-                else return player!.setNightcore(true)
+                else return player!.setNightcore(false)
             },
             eightd: () => {
                 if (player?.filters.eightD) return -1;
-                else return player!.setEightD(true);
+                else return player!.setEightD(false);
             },
             '8d': () => { // Just in case when user do 8d instead of eightd.
                 if (player?.filters.eightD) return -1;
-                else return player!.setEightD(true);
+                else return player!.setEightD(false);
             },
             daycore: () => {
                 if (player?.filters.daycore) return -1;
-                else return player!.setDaycore(true);
+                else return player!.setDaycore(false);
             },
             trebblebass: () => {
                 if (player?.filters.trebblebass) return -1;
-                else return player!.setTrebbleBass(true);
+                else return player!.setTrebbleBass(false);
             },
             soft: () => {
                 if (player?.filters.soft) return -1
-                else return player!.setSoft(true)
+                else return player!.setSoft(false)
             },
             tremolo: () => {
                 if (player?.filters.tremolo) return -1
-                else return player!.setTremolo(true)
+                else return player!.setTremolo(false)
             },
             earrape: () => {
                 if (player?.filters.earrape) return -1
-                else return player!.setEarrape(true)
+                else return player!.setEarrape(false)
             },
             pop: () => {
                 if (player?.filters.pop) return -1
-                else return player!.setPop(true)
+                else return player!.setPop(false)
             },
             vaporwave: () => {
                 if (player?.filters.vaporwave) return -1
-                else return player!.setVaporwave(true)
+                else return player!.setVaporwave(false)
+            },
+            distortion: () => {
+                if (player?.filters.distortion) return -1
+                else return player!.setDistortion(false)
+            },
+            vibrato: () => {
+                if (player?.filters.vibrato) return -1
+                else return player!.setVibrato(false)
+            },
+            karaoke: () => {
+                if (player?.filters.karaoke) return -1
+                else return player!.setKaraoke(false)
             }
         }
 
-        if (name == 'clear' && Object.values(player.filters).includes(true)) {
-            player.clearFilters()
-            return message.channel.send('Cleared all active filters.')
+        if (name == 'clear') {
+            switch(Object.values(player.filters).includes(true)) {
+                case true:
+                    player.clearFilters()
+                    return message.channel.send('Cleared all active filters.')
+                case false:
+                    return message.channel.send('There are no active filters!')
+            } // ClearFilter handler
         }
 
         if (!FilterData[name]) return message.channel.send(`There is no such Filter!`)
