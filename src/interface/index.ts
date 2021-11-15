@@ -8,6 +8,7 @@ export { IManagerEvent } from './managerEvent'
 export { ms } from './Utils/sortTimeTrackStart'
 export { progressBar } from './Utils/progressBarNp'
 export { sortRegArray } from './Utils/sortRegArray'
+export { PlayerTimeout } from './Utils/PlayerTimeout'
 /* End Of Utils*/
 
 /* This File consist interfaces and other utils, Instead of doing per file import, WE can just import this dir instead :D*/

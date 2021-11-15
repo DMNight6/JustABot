@@ -11,6 +11,7 @@ class Core extends discord.Client {
 
     declare public token: string;
     declare public Music: Manager;
+    declare public PlayerTimeoutTask: NodeJS.Timeout; // Will only be accessable by Utils - PlayerTimeout.
     public logger = Logger;
 
     constructor(token: string, erela_config: object) {
