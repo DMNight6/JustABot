@@ -1,5 +1,4 @@
-import { Message, MessageEmbed } from "discord.js";
-import { Player } from "erela.js";
+import { MessageEmbed } from "discord.js";
 import { ICommand } from "../../interface";
 
 interface FilterDataStrcuture {
