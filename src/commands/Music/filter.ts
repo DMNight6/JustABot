@@ -90,9 +90,11 @@ const FilterCommand: ICommand = {
         }
 
         if (!FilterData[name]) return message.channel.send(`There is no such Filter!`)
+            .then(msg => setTimeout(() => msg.delete(), 7_000));
         else {
             if (FilterData[name]() === -1) return message.channel.send('Requested Filter is already on.')
-            else return message.channel.send(`Requested Filter - \`\`${name.charAt(0).toUpperCase()+name.slice(1)}\`\` is now on.`)
+            else return await message.channel.send(`Requested Filter - \`\`${name.charAt(0).toUpperCase()+name.slice(1)}\`\` is now on.`)
+                .then(msg => setTimeout(() => msg.delete(), 7_000))
 
         }
     } 
