@@ -10,14 +10,16 @@ import filterPlugins from 'erela.js-filter';
 class Core extends discord.Client {
 
     declare public token: string;
+    declare public owner: string;
     declare public Music: Manager;
     declare public PlayerTimeoutTask: NodeJS.Timeout; // Will only be accessable by Utils - PlayerTimeout.
     public logger = Logger;
 
-    constructor(token: string, erela_config: object) {
+    constructor(token: string, erela_config: object, id: string) {
         super({
             intents: new discord.Intents(32767)
         })
+        this.owner = id
         this.token = token;
         this.Music = new Manager({
             ...erela_config,

@@ -6,6 +6,7 @@ const LAVALINK = {
 
 export const CONFIG = {
     TOKEN: "EXAMPLE_BOT_TOKEN", // Replace EXAMPLE_BOT_TOKEN with your bot token.
+    ID: "BOT_OWNER_ID", // Replace BOT_OWNER_ID with your user id.
     ERELA: {
         nodes: [LAVALINK]
     },

@@ -16,6 +16,10 @@ const MessageCreateEvent: IEvent = {
             .split(/ +/g);
         const command = client.commands.get(name.toLowerCase()) || client.commands.find(cmd => cmd.alias?.includes(name.toLowerCase())!) // Change alias fetch to a optimized version :D
         if (!command) return;
+        if (command.owneronly) {
+            if (!(message.author.id === client.owner)) message.channel.send('This is not avaliable for you to use.')
+            else await command.run(client, message, args);
+        }
         if (command.perms) { // This is ran when command.perms exist on the command requested
             const MemberPerms = message.member?.permissions
             if (!MemberPerms || !MemberPerms.has(command.perms)) return message.channel.send('You cannot do this!')
