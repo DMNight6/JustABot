@@ -45,7 +45,7 @@ async function cronTask(url: string, dest: string, func: Function): Promise<void
 async function spawnLv() {
     if (!fs.existsSync(resolve(__dirname, 'application.yml'))) await createcfg();
 
-    const child = spawn(`java`, ['-jar', '-Xmx 128M',resolve(__dirname, 'Lavalink', 'Lavalink.jar')])
+    const child = spawn(`java`, ['-jar', '-Xmx128m',resolve(__dirname, 'Lavalink', 'Lavalink.jar')])
 
     child.stdout.setEncoding('utf-8')
     child.stderr.setEncoding('utf-8')
