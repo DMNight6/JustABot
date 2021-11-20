@@ -4,7 +4,7 @@
   "description": "Just a bot I code on stream",
   "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node .",
+    "start": "npm run startLv",
     "startLv": "(cd src/scripts && ts-node StartLavalink.ts) & npm run start"
   },
   "repository": {
