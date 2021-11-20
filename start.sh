@@ -9,10 +9,7 @@ do
 git fetch; git pull
 npm install
 
-cd src/scripts&
-bash -c "exec -a JS-Lavalink ts-node SpawnLavalink.ts"&
-cd ../../&
-bash -c "exec -a main ts-node ."&
+bash -c "exec -c npm run start"
 
 bash stop.sh
 
