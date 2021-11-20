@@ -11,3 +11,5 @@ const RebootCommand: ICommand = {
         (await import("child_process")).exec(resolve(__dirname, '..', '..', 'stop.sh'))
     }
 }
+
+export default RebootCommand
