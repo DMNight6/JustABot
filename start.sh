@@ -3,14 +3,10 @@ clear
 npm install
 clear
 
-while :
-do
-
-git fetch; git pull
-npm install
-
-bash -c "exec -c npm run start"
-
-bash stop.sh
-
+while :; do
+    bash stop.sh
+    cd src/scripts
+    bash -c "exec -a ts-node SpawnLavalink.ts"
+    cd ../../
+    bash -c "exec -a ts-node ."
 done
