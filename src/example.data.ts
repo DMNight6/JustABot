@@ -1,7 +1,7 @@
 const LAVALINK = {
     host: 'localhost',
     port: 7777,
-    pass: "LAVALINKJS"
+    password: "LAVALINKJS" // Fix script not doing things the right way.
 }
 
 export const CONFIG = {
