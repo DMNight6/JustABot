@@ -9,7 +9,7 @@ do
 
     bash stop.sh
     cd src/scripts/
-    bash -c "exec -a ts-node spawnLavalink.ts"&
-    cd ../../
-    bash -c "exec -a ts-node ."
+    bash -c "exec -a ts-node SpawnLavalink.ts"&
+    cd ../
+    bash -c "exec -a ts-node index.ts"
 done
