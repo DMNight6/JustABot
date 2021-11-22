@@ -66,7 +66,7 @@ async function spawnLv() {
 };
 
 Logger.info(`Fetching the latest Lavalink.jar, Please Wait...`)
-axios.get("https://api.github.com/repos/Cog-Creators/Lavalink-Jars/releases/latest", {responseType: 'json'})
+axios.get("https://api.github.com/repos/freyacodes/Lavalink/releases/latest", {responseType: 'json'})
     .then(res => Object(res.data))
     .then(json => {
         if(json.assets[0] && json.assets[0].browser_download_url){
