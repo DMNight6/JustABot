@@ -1,5 +1,6 @@
 import { ICommand } from "../../interface";
 import { resolve } from 'path'
+import shelljs from 'shelljs'
 
 const RebootCommand: ICommand = {
     name: 'reboot',
@@ -9,7 +10,7 @@ const RebootCommand: ICommand = {
     owneronly: true,
     run: async(client, message, args) => {
         message.channel.send(`Executed reboot.`);
-        (await import('child_process')).exec(`cd ${resolve(__dirname, '..', '..', '..')} && bash stop.sh`) // Fix script not executing properly.
+        shelljs.exec(`bash ${resolve(__dirname, '..', '..', '..', 'stop.sh')}`) // Fix script not executing properly.
     }
 }
 
