@@ -44,6 +44,10 @@ async function cronTask(url: string, dest: string, func: Function): Promise<void
 
 async function spawnLv() {
     if (!fs.existsSync(resolve(__dirname, 'application.yml'))) await createcfg();
+    else {
+        fs.unlinkSync(resolve(__dirname, ''))
+        await createcfg();
+    }
 
     const child = spawn(`java`, ['-jar', '-Xmx128m',resolve(__dirname, 'Lavalink', 'Lavalink.jar')])
 
@@ -66,7 +70,7 @@ async function spawnLv() {
 };
 
 Logger.info(`Fetching the latest Lavalink.jar, Please Wait...`)
-axios.get("https://api.github.com/repos/freyacodes/Lavalink/releases/latest", {responseType: 'json'})
+axios.get("https://api.github.com/repos/DespenserTeam/Lavalink-arm64/releases/latest", {responseType: 'json'})
     .then(res => Object(res.data))
     .then(json => {
         if(json.assets[0] && json.assets[0].browser_download_url){
