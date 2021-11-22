@@ -1,2 +1,2 @@
 #!/bin/bash
-pkill -f Lavalink; pkill -f main
+pkill -9 -f Lavalink; pkill -9 -f main
