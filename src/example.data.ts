@@ -1,7 +1,9 @@
 const LAVALINK = {
     host: 'localhost',
     port: 7777,
-    password: "LAVALINKJS" // Fix script not doing things the right way.
+    password: "LAVALINKJS", // Fix script not doing things the right way.
+    retryAmount: 10, // Try to connect for x times
+    retryDelay: 5 // Retry when failed but timed.
 }
 
 export const CONFIG = {
