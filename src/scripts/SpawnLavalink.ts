@@ -45,7 +45,7 @@ async function cronTask(url: string, dest: string, func: Function): Promise<void
 async function spawnLv() {
     if (!fs.existsSync(resolve(__dirname, 'application.yml'))) await createcfg();
     else {
-        fs.unlinkSync(resolve(__dirname, ''))
+        fs.unlinkSync(resolve(__dirname, 'application.yml'))
         await createcfg();
     }
 
