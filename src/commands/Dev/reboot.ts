@@ -1,5 +1,6 @@
 import { ICommand } from "../../interface";
 import { resolve } from 'path'
+
 const RebootCommand: ICommand = {
     name: 'reboot',
     desc: 'Reboots the bot',
@@ -8,7 +9,7 @@ const RebootCommand: ICommand = {
     owneronly: true,
     run: async(client, message, args) => {
         message.channel.send(`Executed reboot.`);
-        (await import("child_process")).exec(resolve(__dirname, '..', '..', 'stop.sh'))
+        (await import('child_process')).exec(resolve(__dirname, '..', '..', '..', 'stop.sh'))
     }
 }
 
