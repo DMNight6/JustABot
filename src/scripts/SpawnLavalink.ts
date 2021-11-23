@@ -53,11 +53,8 @@ async function spawnLv() {
     let cpucores = cpus().length; // Detects how many core you have and use for java (aaa)
     const child = spawn(`java`, [
         '-jar', 
-        '-XX:+UseShenandoahGC',
         '-Xmx128m',
-        '-XX:+UnlockExperimentalVMOptions', 
-        '-XX:ShenandoahUncommitDelay=1000', 
-        '-XX:ShenandoahGuaranteedGCInterval=10000',
+        '-XX:+AggressiveOpts',
         `-XX:ActiveProcessorCount=${cpucores}`, 
         resolve(__dirname, 'Lavalink', 'Lavalink.jar')
     ]) // Optmize ram usage
