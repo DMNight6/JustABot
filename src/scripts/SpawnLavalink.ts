@@ -54,7 +54,6 @@ async function spawnLv() {
     const child = spawn(`java`, [
         '-jar', 
         '-Xmx128m',
-        '-XX:+AggressiveOpts',
         `-XX:ActiveProcessorCount=${cpucores}`, 
         resolve(__dirname, 'Lavalink', 'Lavalink.jar')
     ]) // Optmize ram usage
