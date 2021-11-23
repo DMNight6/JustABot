@@ -4,6 +4,7 @@ import Logger from '../struct/Logger';
 import { spawn } from 'child_process';
 import { resolve } from 'path';
 import { createcfg } from './CreateCfg'
+import { cpus } from 'os';
 
 /* Function Checker, these parts can be found on axios repo */
 function isObject(val: any) {
@@ -49,7 +50,7 @@ async function spawnLv() {
         await createcfg();
     }
 
-    let cpucores = navigator.hardwareConcurrency; // Detects how many core you have and use for java (aaa)
+    let cpucores = cpus().length; // Detects how many core you have and use for java (aaa)
     const child = spawn(`java`, [
         '-jar', 
         '-XX:+UseShenandoahGC',
