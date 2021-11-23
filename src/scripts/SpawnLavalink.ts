@@ -56,7 +56,7 @@ async function spawnLv() {
         '-Xmx128m',
         `-XX:ActiveProcessorCount=${cpucores}`, 
         resolve(__dirname, 'Lavalink', 'Lavalink.jar')
-    ]) // Optmize ram usage
+    ]) 
 
     child.stdout.setEncoding('utf-8')
     child.stderr.setEncoding('utf-8')
