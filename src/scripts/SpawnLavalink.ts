@@ -55,7 +55,6 @@ async function spawnLv() {
         '-jar', 
         '-XX:+UseShenandoahGC',
         '-Xmx128m',
-        '-XX:+AggressiveOpts', 
         '-XX:+UnlockExperimentalVMOptions', 
         '-XX:ShenandoahUncommitDelay=1000', 
         '-XX:ShenandoahGuaranteedGCInterval=10000',
