@@ -55,6 +55,8 @@ async function spawnLv() {
         '-jar', 
         '-Xmx128m',
         `-XX:ActiveProcessorCount=${cpucores}`, 
+        `-XX:CICompilerCount=${cpucores}`,
+        `-XX:+UseParallelGC`, 
         resolve(__dirname, 'Lavalink', 'Lavalink.jar')
     ]) 
 
