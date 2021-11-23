@@ -49,7 +49,18 @@ async function spawnLv() {
         await createcfg();
     }
 
-    const child = spawn(`java`, ['-jar', '-Xmx128m',resolve(__dirname, 'Lavalink', 'Lavalink.jar')])
+    let cpucores = navigator.hardwareConcurrency; // Detects how many core you have and use for java (aaa)
+    const child = spawn(`java`, [
+        '-jar', 
+        '-XX:+UseShenandoahGC',
+        '-Xmx128m',
+        '-XX:+AggressiveOpts', 
+        '-XX:+UnlockExperimentalVMOptions', 
+        '-XX:ShenandoahUncommitDelay=1000', 
+        '-XX:ShenandoahGuaranteedGCInterval=10000',
+        `-XX:ActiveProcessorCount=${cpucores}`, 
+        resolve(__dirname, 'Lavalink', 'Lavalink.jar')
+    ]) // Optmize ram usage
 
     child.stdout.setEncoding('utf-8')
     child.stderr.setEncoding('utf-8')
