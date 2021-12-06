@@ -1,11 +1,11 @@
 import discord from 'discord.js' // Discord.
 import { ICommand } from "../interface";
 import { readdirSync, writeFileSync, existsSync } from 'fs';
-import chokidar from 'chokidar';
 import { resolve } from 'path';
 import Logger from './Logger';
 import { Manager } from 'erela.js';
 import filterPlugins from 'erela.js-filter';
+import { SlashCommandBuilder } from '../interface/slashcommands';
 
 class Core extends discord.Client {
 
@@ -31,8 +31,10 @@ class Core extends discord.Client {
         })
     }
 
-    public commands: discord.Collection<string, ICommand> = new discord.Collection(); /* This is the commands collection.*/
-
+    public commands: discord.Collection<string, ICommand> = new discord.Collection(); /* This is the commands collection. */
+    public slashcommands: discord.Collection<string, SlashCommandBuilder> = new discord.Collection(); /* This is the slash commands collection. */
+    public RegisterSlash: Array<SlashCommandBuilder> = [];
+    
     /* Import events (Merged Client and Manager.) */
     private async importEvents(): Promise<void> {
         const EventFiles = readdirSync(resolve(__dirname, '..', 'events', 'client')).filter(file => file.endsWith('.ts'))
@@ -59,7 +61,18 @@ class Core extends discord.Client {
                 const command = ( await import(resolve(__dirname, '..', 'commands', folder, file)) ).default;
                 this.commands.set(command.name.toLowerCase() /* Fix command being uppercase and make you go insane */, command) // This creates a Map consisting the key and value.
             }
-        }
+        } // Load default command
+
+        /* Load slash command */
+        const SlashCommandFolder = readdirSync(resolve(__dirname, '..', 'commandslashs')).filter(file => file.endsWith('.ts'));
+        SlashCommandFolder.map(async data => {
+            const SlashCommand = (await import(resolve(__dirname, '..', 'commandslashs', data))).default;
+            
+            if (!SlashCommand.name) return;
+            this.slashcommands.set(SlashCommand.name, SlashCommand);
+
+            this.RegisterSlash.push(SlashCommand);
+        })
     }
 
     private async FileCheck(): Promise<void | number> { // Check if file exist
