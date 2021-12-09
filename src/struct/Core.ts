@@ -9,31 +9,31 @@ import { SlashCommandBuilder } from '../interface/slashcommands';
 
 class Core extends discord.Client {
 
-    declare public token: string;
-    declare public owner: string;
-    declare public Music: Manager;
+    declare public token: string; // Declaring token (overwrite default BaseClient - Null|Undefined)
+    declare public owner: string; // Declaring non-existance value in BaseClient for 1 id user command.
+    declare public Music: Manager; // Declaring Erela.js Manager
     declare public PlayerTimeoutTask: NodeJS.Timeout; // Will only be accessable by Utils - PlayerTimeout.
-    public logger = Logger;
+    public logger = Logger; // Create logging
 
     constructor(token: string, erela_config: object, id: string) {
         super({
-            intents: new discord.Intents(32767)
+            intents: new discord.Intents(32767) // Use all intents (32767)
         })
-        this.owner = id
-        this.token = token;
+        this.owner = id // set owner with the value of ID in new()
+        this.token = token; // set token with the value of TOKEN in new()
         this.Music = new Manager({
-            ...erela_config,
-            plugins: [new filterPlugins()],
+            ...erela_config, // Object for node
+            plugins: [new filterPlugins()], // Plugins!
             send: (id, payload) => {
-                const guild = this.guilds.cache.get(id)
-                if (guild) guild.shard.send(payload)
+                const guild = this.guilds.cache.get(id) // Get guild
+                if (guild) guild.shard.send(payload) // Send payload
             }
         })
     }
 
     public commands: discord.Collection<string, ICommand> = new discord.Collection(); /* This is the commands collection. */
     public slashcommands: discord.Collection<string, SlashCommandBuilder> = new discord.Collection(); /* This is the slash commands collection. */
-    public RegisterSlash: Array<SlashCommandBuilder> = [];
+    public RegisterSlash: Array<SlashCommandBuilder> = []; /* Slash command array for registering. */
     
     /* Import events (Merged Client and Manager.) */
     private async importEvents(): Promise<void> {
@@ -42,13 +42,13 @@ class Core extends discord.Client {
             const Event = (await import(resolve(__dirname, '..', 'events', 'client', file))).default;
             if (Event.once) this.once(Event.name, (...args) => Event.run(this, ...args))
             else this.on(Event.name, (...args) => Event.run(this, ...args))
-        }
+        } // Client event loader
 
         const EventFileManager = readdirSync(resolve(__dirname, '..', 'events', 'manager')).filter(file => file.endsWith('.ts'))
         for (const file of EventFileManager) {
             const MEvent = (await import(resolve(__dirname, '..', 'events', 'manager', file))).default;
             this.Music.on(MEvent.name, (...args) => MEvent.run(this, this.Music, ...args))
-        }
+        } // Manager event Loader
     }
     
     /* Changed how commands are loaded. */
@@ -61,7 +61,7 @@ class Core extends discord.Client {
                 const command = ( await import(resolve(__dirname, '..', 'commands', folder, file)) ).default;
                 this.commands.set(command.name.toLowerCase() /* Fix command being uppercase and make you go insane */, command) // This creates a Map consisting the key and value.
             }
-        } // Load default command
+        } // Load default command ($cprefix...)
 
         /* Load slash command */
         const SlashCommandFolder = readdirSync(resolve(__dirname, '..', 'commandslashs')).filter(file => file.endsWith('.ts'));
@@ -75,7 +75,7 @@ class Core extends discord.Client {
         })
     }
 
-    private async FileCheck(): Promise<void | number> { // Check if file exist
+    private async FileCheck(): Promise<void | number> { // Check if file exist else, create.
         if (!existsSync(resolve(__dirname, '..', 'guild_prefix.json'))) return writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify({}, null, 0));
         else return 0
     }
@@ -140,10 +140,10 @@ class Core extends discord.Client {
     }
 
     public async connect(): Promise<string> {
-        await this.FileCheck(); // Check file #L65
+        await this.FileCheck(); // Check file #L65 ( This slows the starting speed but worth the wait )
         await this.importEvents(); // Import Events from Client and Manager #L33
-        await this.importCommands(); // Load Commands #L51
-        return this.login(this.token) // Returns BaseClient
+        await this.importCommands(); // Load Commands #L51 ( Inclduing slash command )
+        return this.login(this.token) // Returns BaseClient ( Init Websocket connection with provided token )
     }
 }
 
