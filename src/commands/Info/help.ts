@@ -10,12 +10,14 @@ const DynamicHelpCommand: ICommand = {
     usage: '[None/command name]',
     alias: ['h'],
     run: async(client, message, args) => {
-        const prefix = await client.getPrefix(message.guild?.id!) || '$';
-        const fields: Record<string, ICommand[]> = {};
+        const prefix = await client.getPrefix(message.guild?.id!) || '$'; // Get prefix from guild_prefix.json and returns strings (if not exist, use prefix after ||)
+        const cmd: ICommand | undefined = client.commands.get(args.toString()) // Map from discord.Collection • Returns ICommand if exist else undefined.
+        const fields: Record<string, ICommand[]> = {}; // Structure for Record • commands.
+
         for(const command of Array.from(client.commands)) {
             if (!fields[command[1].category]) fields[command[1].category] = [command[1]];
             else fields[command[1].category] = [...fields[command[1].category], command[1]];
-        }
+        } // Sort Array into fields
 
         if (!args.length) {
             let currentPage = 0;
@@ -47,6 +49,16 @@ const DynamicHelpCommand: ICommand = {
                         break;
                 }
             });
+        } else if (cmd !== undefined) {
+            const embed = new MessageEmbed()
+                .setAuthor(`Bot Commands`, client.user?.displayAvatarURL())
+                .setDescription(`C • ${prefix}${cmd.name} ${cmd.usage}\nA: ${cmd.alias} \nD • ${cmd.desc}`)
+                .setFooter(`Requested By • ${message.author.tag}`, message.author.displayAvatarURL())
+
+            message.channel.send({ embeds: [embed]})
+        } else {
+            message.channel.send({ content: `There is no such command called \`${args.toString()}\``})
+                .then(msg => setTimeout(() => msg.delete(), 10_000))
         }
 
     }
