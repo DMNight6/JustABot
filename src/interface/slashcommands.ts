@@ -14,12 +14,7 @@ export interface SlashCommandBuilder {
             description: string,
             type: import('discord.js').ApplicationCommandOptionType
             required: boolean
-            choices?: [
-                {
-                    name: string
-                    value: string
-                }
-            ]
+            choices?: Array<{ name: string, value: string }>
         }
     ]
     run: RunArgs

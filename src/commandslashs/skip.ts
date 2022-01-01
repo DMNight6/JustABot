@@ -20,9 +20,16 @@ const SkipSlashCommand: SlashCommandBuilder = {
         let song = player.queue.current;
 
         if (!value) {
+            if (player.queueRepeat) player.queue.add(song!)
             player.stop()
             interection.reply({embeds: [new MessageEmbed().setDescription(`Successfully skipped [${song?.title}](${song?.uri})`)], ephemeral: true})
         } else if (value < player.queue.length) {
+            if (player.queueRepeat) {
+                player.queue.add(song!)
+                for (let i = 0; i < value - 1; i++) {
+                    player.queue.add(player.queue[i])
+                }
+            }
             player.stop(value)
             interection.reply({ embeds: [new MessageEmbed().setDescription(`Successfully skipped ${value} songs`)], ephemeral: true})
         } else {
