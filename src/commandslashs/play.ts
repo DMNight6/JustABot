@@ -15,7 +15,7 @@ const PlaySlashCommand: SlashCommandBuilder = {
         let player = client.Music.get(interaction.guild?.id!);
 
         let getGuild = client.guilds.cache.get(interaction.guild?.id!);
-        let member = getGuild?.members.cache.get(interaction.member.user.id)
+        let member = getGuild?.members.cache.get(interaction.member!.user.id)
         let voiceC = member?.voice.channel?.id
 
         if (!voiceC) return interaction.reply({content: 'Join a VC before executing this command!', ephemeral: true})
@@ -39,18 +39,18 @@ const PlaySlashCommand: SlashCommandBuilder = {
 
         let result;
         if (valid) {
-            result = await player.search(term, interaction.member.user.id)
+            result = await player.search(term, interaction.member!.user.id)
         } else {
             result = await player.search({
                 query: term,
                 source: 'youtube'
-            }, interaction.member.user.id)
+            }, interaction.member!.user.id)
         }
 
         if (['SEARCH_RESULT', 'TRACK_LOADED'].includes(result.loadType)) {
             const shouldPlayNow = !player.playing && !player.paused && !player.queue.size
             player.queue.add(result.tracks[0])
-            if (!shouldPlayNow) interaction.reply({ embeds: [new MessageEmbed().setAuthor(`Added To Queue`, interaction.user.displayAvatarURL()!).setDescription(`[${result.tracks[0].title}](${result.tracks[0].uri})\nArtist • ${result.tracks[0].author}`).setColor('RANDOM').setFooter(`Requested by • ${interaction.member.user}`, interaction.user.displayAvatarURL()!).setColor('RANDOM').setThumbnail(result.tracks[0].displayThumbnail('maxresdefault'))], ephemeral: true })
+            if (!shouldPlayNow) interaction.reply({ embeds: [new MessageEmbed().setAuthor(`Added To Queue`, interaction.user.displayAvatarURL()!).setDescription(`[${result.tracks[0].title}](${result.tracks[0].uri})\nArtist • ${result.tracks[0].author}`).setColor('RANDOM').setFooter(`Requested by • ${interaction.member!.user}`, interaction.user.displayAvatarURL()!).setColor('RANDOM').setThumbnail(result.tracks[0].displayThumbnail('maxresdefault'))], ephemeral: true })
             else {
                 await interaction.reply({ content: 'There is no song in queue, I will proceed to play the music added.', ephemeral: true })
                 await player.play();
@@ -59,7 +59,7 @@ const PlaySlashCommand: SlashCommandBuilder = {
             if (!result.playlist) return;
             player.queue.add(result.tracks)
             const shouldPlayNow = !player.playing && !player.paused && player.queue.totalSize === result.tracks.length;
-            if (!shouldPlayNow) await interaction.reply({embeds: [new MessageEmbed().setAuthor(`Added To Queue`, interaction.user.displayAvatarURL()!).setDescription(`[${result.playlist.name}](${result.playlist.selectedTrack?.uri})\nTracks • ${result.tracks.length}`).setFooter(`Requested By • ${interaction.member.user}`, interaction.user.displayAvatarURL()!).setColor('RANDOM').setThumbnail(result.playlist.selectedTrack?.displayThumbnail('maxresdefault')!)], ephemeral: true})
+            if (!shouldPlayNow) await interaction.reply({embeds: [new MessageEmbed().setAuthor(`Added To Queue`, interaction.user.displayAvatarURL()!).setDescription(`[${result.playlist.name}](${result.playlist.selectedTrack?.uri})\nTracks • ${result.tracks.length}`).setFooter(`Requested By • ${interaction.member!.user}`, interaction.user.displayAvatarURL()!).setColor('RANDOM').setThumbnail(result.playlist.selectedTrack?.displayThumbnail('maxresdefault')!)], ephemeral: true})
             else {
                 await interaction.reply({ content: 'There is no song in queue. I will proceed to play the added playlist.', ephemeral: true })
                 await player.play();
