@@ -6,7 +6,7 @@ const MTrackStartEvent: IManagerEvent = {
     name: 'trackStart',
     run: async(client, _manager, player: Player, track: Track) => {
         const Embed = new MessageEmbed()
-        Embed.setAuthor(`Now Playing • ${track.title}`, client.user?.avatar!, track.uri)
+        Embed.setAuthor({ name: `Now Playing • ${track.title}`, iconURL: client.user?.avatar!, url: track.uri})
         Embed.setThumbnail(track.displayThumbnail(`maxresdefault`))
         Embed.setDescription(
             `

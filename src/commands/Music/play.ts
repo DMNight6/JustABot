@@ -42,13 +42,13 @@ const PlayCommand: ICommand = {
         if (['SEARCH_RESULT', 'TRACK_LOADED'].includes(result.loadType)) {
             const shouldPlayNow = !player.playing && !player.paused && !player.queue.size
             player.queue.add(result.tracks[0])
-            if (!shouldPlayNow) message.channel.send({embeds: [new MessageEmbed().setAuthor(`Added To Queue`, client.user?.avatarURL()!).setDescription(`[${result.tracks[0].title}](${result.tracks[0].uri})\nArtist • ${result.tracks[0].author}`).setColor('RANDOM').setFooter(`Requested by • ${message.author.tag}`, message.author.displayAvatarURL()).setColor('RANDOM').setThumbnail(result.tracks[0].displayThumbnail('maxresdefault'))]})
+            if (!shouldPlayNow) message.channel.send({embeds: [new MessageEmbed().setAuthor({ name: `Added to Queue`, iconURL: client.user?.avatarURL()!}).setDescription(`[${result.tracks[0].title}](${result.tracks[0].uri})\nArtist • ${result.tracks[0].author}`).setColor('RANDOM').setFooter(`Requested by • ${message.author.tag}`, message.author.displayAvatarURL()).setColor('RANDOM').setThumbnail(result.tracks[0].displayThumbnail('maxresdefault'))]})
             else await player.play();
         } else if (result.loadType === `PLAYLIST_LOADED`) {
             if (!result.playlist) return;
             player.queue.add(result.tracks)
             const shouldPlayNow = !player.playing && !player.paused && player.queue.totalSize === result.tracks.length
-            if (!shouldPlayNow) await message.channel.send({embeds: [new MessageEmbed().setAuthor(`Added To Queue`, client.user?.displayAvatarURL()).setDescription(`[${result.playlist.name}](${result.playlist.selectedTrack?.uri})\nTracks • ${result.tracks.length}`).setFooter(`Requested By • ${message.author.tag}`, message.author.avatarURL()!).setColor('RANDOM').setThumbnail(result.playlist.selectedTrack?.displayThumbnail('maxresdefault')!)]})
+            if (!shouldPlayNow) await message.channel.send({embeds: [new MessageEmbed().setAuthor({ name: `Added To Queue`, iconURL: client.user?.displayAvatarURL()}).setDescription(`[${result.playlist.name}](${result.playlist.selectedTrack?.uri})\nTracks • ${result.tracks.length}`).setFooter(`Requested By • ${message.author.tag}`, message.author.avatarURL()!).setColor('RANDOM').setThumbnail(result.playlist.selectedTrack?.displayThumbnail('maxresdefault')!)]})
             else await player.play();
         } else if (result.loadType === `NO_MATCHES`) {
             message.channel.send(`My bad, Seems like I can't find the songs you queried for`)

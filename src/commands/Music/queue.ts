@@ -34,13 +34,13 @@ const QueueCommand: ICommand = {
                 case '⬅':
                     if (currentPage !== 0) {
                         --currentPage;
-                        sendEmbed.edit({embeds: [embed[currentPage].setFooter(`${player.trackRepeat ? 'Repeat • ✔️' : 'Repeat • ✖️'} | ${player.queueRepeat ? 'Queue Loop • ✔️' : 'Queue Loop • ✖️'} | Page ${currentPage + 1}/${embed.length}`)!]})
+                        sendEmbed.edit({embeds: [embed[currentPage].setFooter({ text: `${player.trackRepeat ? 'Repeat • ✔️' : 'Repeat • ✖️'} | ${player.queueRepeat ? 'Queue Loop • ✔️' : 'Queue Loop • ✖️'} | Page ${currentPage + 1}/${embed.length}`})!]})
                     }
                     break;
                 case '➡':
                     if (currentPage < embed.length - 1) { // If current page (number) is less than embed.length (Need to -1 for correct array count)
                         ++currentPage;
-                        sendEmbed.edit({embeds: [embed[currentPage].setFooter(`${player.trackRepeat ? 'Repeat • ✔️' : 'Repeat • ✖️'} | ${player.queueRepeat ? 'Queue Loop • ✔️' : 'Queue Loop • ✖️'} | Page ${currentPage + 1}/${embed.length}`)!]})
+                        sendEmbed.edit({embeds: [embed[currentPage].setFooter({ text: `${player.trackRepeat ? 'Repeat • ✔️' : 'Repeat • ✖️'} | ${player.queueRepeat ? 'Queue Loop • ✔️' : 'Queue Loop • ✖️'} | Page ${currentPage + 1}/${embed.length}`})!]})
                     }
                     break;
             }

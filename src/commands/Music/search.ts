@@ -47,7 +47,7 @@ const SearchCommand: ICommand = {
                     if (number < current.length && number > -1) {
                         player.queue.add(current[number])
                         if (!player.playing && !player.queue.length && !player.queue.size) await player.play()
-                        await message.channel.send({embeds: [new MessageEmbed().setAuthor(`Added To Queue`, client.user?.displayAvatarURL()).setDescription(`[${current[number].title}](${current[number].uri})\nAuthor • ${current[number].author}`).setFooter(`Requested By • ${message.author.tag}`, message.author.avatarURL()!).setColor('RANDOM').setThumbnail(current[number].displayThumbnail('maxresdefault'))]})
+                        await message.channel.send({embeds: [new MessageEmbed().setAuthor({ name: `Added To Queue`, iconURL: client.user?.displayAvatarURL()}).setDescription(`[${current[number].title}](${current[number].uri})\nAuthor • ${current[number].author}`).setFooter({ text: `Requested By • ${message.author.tag}`, iconURL: message.author.avatarURL()!}).setColor('RANDOM').setThumbnail(current[number].displayThumbnail('maxresdefault'))]})
                     }
                     break;
                 default:
