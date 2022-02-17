@@ -26,4 +26,4 @@ By doing `<npm run start>`, the bot will boot up, logging with bot name + tag wi
 ### TODO
 
 - [x] Make everything slash command only.
-- [] Add 24/7 command. 
+- [ ] Add 24/7 command. 
