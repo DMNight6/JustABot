@@ -1,6 +1,5 @@
 interface TimerCFG {
-    Id: string,
-    timeout: NodeJS.Timeout
+    [key: string]: NodeJS.Timeout
 };
 
-export interface TimerConfiguration extends Array<TimerCFG>{};
+export interface TimerConfiguration extends TimerCFG {};

@@ -29,7 +29,7 @@ export class Core extends discord.Client {
 
     public Commands: discord.Collection<string, ICommand> = new discord.Collection(); /* Command Collection */
     public CommandInfo: Array<ICommand> = []; /* Content of the slash command */
-    public TimerCFG: TimerConfiguration = [];
+    public TimerCFG: TimerConfiguration = {};
 
     /* Import events (Client & Manager) */
     private async importEvents(): Promise<void> {
