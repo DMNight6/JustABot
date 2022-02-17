@@ -1,7 +1,7 @@
-import { Core } from './struct/Core'
-import { CONFIG } from './data'
+import { Core } from './struct/Core';
+import { CONFIG } from './data';
 
-const client = new Core(CONFIG.TOKEN, CONFIG.ERELA, CONFIG.ID);
+const client = new Core(CONFIG.TOKEN, CONFIG.ERELA);
 client.connect();
 
-/* Revert Changes */
+// Slight Changes will be made in this file in the future

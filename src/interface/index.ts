@@ -1,14 +1,11 @@
 /* Interfaces */
-export { ICommand } from './commands'
-export { IEvent } from './event'
-export { IManagerEvent } from './managerEvent'
+export { ICommand } from './command';
+export { IEvent } from './event';
+export { IManagerEvent } from './managerEvent';
 /* End of Interfaces */
 
 /* Utils */
-export { ms } from './Utils/sortTimeTrackStart'
-export { progressBar } from './Utils/progressBarNp'
-export { sortRegArray } from './Utils/sortRegArray'
-export { PlayerTimeout } from './Utils/PlayerTimeout'
-/* End Of Utils*/
-
-/* This File consist interfaces and other utils, Instead of doing per file import, WE can just import this dir instead :D*/
+export { ConvertTime } from './Utils/ConvertTime';
+export { PlayerTimeout } from './Utils/PlayerTimeout';
+export { TimerConfiguration } from './Utils/TimerConfig';
+/* End of Utils */

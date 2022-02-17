@@ -1,11 +1,10 @@
-import { Player } from "erela.js";
-import { IManagerEvent, PlayerTimeout } from "../../interface";
+import { IManagerEvent } from "../../interface";
 
 const MQueueEndEvent: IManagerEvent = {
     name: 'queueEnd',
-    run: async(client, _manager, player: Player) => {
-        PlayerTimeout(client, player, 360000)
+    run: async(client, _manager, player: import('erela.js').Player) => {
+        (await import('../../interface')).PlayerTimeout(client, player, 36_0000);
     }
 }
 
-export default MQueueEndEvent
+export default MQueueEndEvent;

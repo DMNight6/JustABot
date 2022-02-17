@@ -1,25 +1,23 @@
-import { MessageEmbed, TextChannel } from "discord.js";
-import { Player } from "erela.js";
-import { Core } from "../../struct/Core";
 /**
- * @param client - Discord's client.
- * @param player - Erela.js PLayer.
- * @param Time - Number
- * @returns {setTimout(() => ...)}
+ * @param client - Discord Client.
+ * @param player - Erela.js Player.
+ * @param Time - number.
+ * @returns {NodeJS.Timeout}
  */
-export async function PlayerTimeout(client: Core, player: Player, Time: number) {
+
+export async function PlayerTimeout(client: import('../../struct/Core').Core, player: import('erela.js').Player, Time: number): Promise<NodeJS.Timeout> {
     return client.PlayerTimeoutTask = setTimeout(async() => {
-        if (!player.queue.current) {
-            player.destroy();
+        if (!player.queue.current && !player.playing && !player.paused) {
             player.queue.clear();
+            player.destroy();
 
-            const embed = new MessageEmbed()
-                .setDescription('Disconnected due to queue being empty.')
-                .setColor('GREY');
+            const Embed = new (await import('discord.js')).MessageEmbed()
+                .setDescription(`Disconnected due to queue being empty.`)
+                .setColor('LIGHT_GREY');
+
             let channel = client.channels.cache.get(player.textChannel!);
-
-            return (<TextChannel> channel).send({embeds: [embed]})
-                .then(msg => setTimeout(() => msg.delete(), 7_000))
-        }
-    }, Time)
+            if (channel?.isText()) return (<import('discord.js').TextChannel> channel).send({ embeds: [Embed] })
+            .then(msg => setTimeout(() => msg.delete(), 10_000));
+        };
+    }, Time);
 }

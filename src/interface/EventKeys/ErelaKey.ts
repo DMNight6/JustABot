@@ -2,8 +2,9 @@ import { Player, Track, TrackEndEvent, TrackExceptionEvent, TrackStartEvent, Tra
 
 /*
     This is just a list of events I've found inside erela.js.
-    This interface is used as a keyof in TS. ( Can be found in ../managerEvent )
+    This interface is used as a keyof.
 */
+
 export interface ErelaEvents {
     nodeCreate: [node: Node];
     nodeDestroy: [node: Node];

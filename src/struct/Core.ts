@@ -1,150 +1,70 @@
-import discord from 'discord.js' // Discord.
-import { ICommand } from "../interface";
-import { readdirSync, writeFileSync, existsSync } from 'fs';
-import { resolve } from 'path';
+import discord from 'discord.js';
+import { ICommand, TimerConfiguration} from '../interface';
 import Logger from './Logger';
+import { resolve } from 'path';
+import { readdirSync } from 'fs';
 import { Manager } from 'erela.js';
-import filterPlugins from 'erela.js-filter';
-import { SlashCommandBuilder } from '../interface/slashcommands';
 
-class Core extends discord.Client {
+/* Convert Everything into Slash command. */
+export class Core extends discord.Client {
+    declare private Token: string;
+    declare public Music: Manager;
+    declare public PlayerTimeoutTask: NodeJS.Timeout; // A Timeout for queue, Cancellable? Yes.
 
-    declare public token: string; // Declaring token (overwrite default BaseClient - Null|Undefined)
-    declare public owner: string; // Declaring non-existance value in BaseClient for 1 id user command.
-    declare public Music: Manager; // Declaring Erela.js Manager
-    declare public PlayerTimeoutTask: NodeJS.Timeout; // Will only be accessable by Utils - PlayerTimeout.
-    public logger = Logger; // Create logging
+    public logger = Logger;
 
-    constructor(token: string, erela_config: object, id: string) {
+    constructor(token: string, erela_config: object ) {
         super({
-            intents: new discord.Intents(32767) // Use all intents (32767)
-        })
-        this.owner = id // set owner with the value of ID in new()
-        this.token = token; // set token with the value of TOKEN in new()
+            intents: new discord.Intents(32767) // Use all intents.
+        });
+        this.Token = token; // Set Token as token
         this.Music = new Manager({
-            ...erela_config, // Object for node
-            plugins: [new filterPlugins()], // Plugins!
-            send: (id, payload) => {
-                const guild = this.guilds.cache.get(id) // Get guild
-                if (guild) guild.shard.send(payload) // Send payload
+            ...erela_config, // Config for erela
+            send: (ID, PAYLOAD) => {
+                const guild = this.guilds.cache.get(ID); // Get Guild
+                if (guild) guild.shard.send(PAYLOAD); // Seend PAYLOAD
             }
-        })
-    }
+        });
+    };
 
-    public commands: discord.Collection<string, ICommand> = new discord.Collection(); /* This is the commands collection. */
-    public slashcommands: discord.Collection<string, SlashCommandBuilder> = new discord.Collection(); /* This is the slash commands collection. */
-    public RegisterSlash: Array<SlashCommandBuilder> = []; /* Slash command array for registering. */
-    
-    /* Import events (Merged Client and Manager.) */
+    public Commands: discord.Collection<string, ICommand> = new discord.Collection(); /* Command Collection */
+    public CommandInfo: Array<ICommand> = []; /* Content of the slash command */
+    public TimerCFG: TimerConfiguration = [];
+
+    /* Import events (Client & Manager) */
     private async importEvents(): Promise<void> {
-        const EventFiles = readdirSync(resolve(__dirname, '..', 'events', 'client')).filter(file => file.endsWith('.ts'))
-        for (const file of EventFiles) {
-            const Event = (await import(resolve(__dirname, '..', 'events', 'client', file))).default;
-            if (Event.once) this.once(Event.name, (...args) => Event.run(this, ...args))
-            else this.on(Event.name, (...args) => Event.run(this, ...args))
-        } // Client event loader
+        const CEventFiles = readdirSync(resolve(__dirname, '..', 'events', 'client')).filter(files => files.endsWith('.ts'));
 
-        const EventFileManager = readdirSync(resolve(__dirname, '..', 'events', 'manager')).filter(file => file.endsWith('.ts'))
-        for (const file of EventFileManager) {
+        for (const file of CEventFiles) {
+            const CEvent = (await import(resolve(__dirname, '..', 'events', 'client', file))).default;
+            if (CEvent.once) this.once(CEvent.name, (...args) => CEvent.run(this, ...args));
+            else this.on(CEvent.name, (...args) => CEvent.run(this, ...args));
+        };
+
+        const MEventFiles = readdirSync(resolve(__dirname, '..', 'events', 'manager')).filter(files => files.endsWith('.ts'));
+
+        for (const file of MEventFiles) {
             const MEvent = (await import(resolve(__dirname, '..', 'events', 'manager', file))).default;
-            this.Music.on(MEvent.name, (...args) => MEvent.run(this, this.Music, ...args))
-        } // Manager event Loader
-    }
-    
-    /* Changed how commands are loaded. */
-    /* V2 Command loading */
+            this.Music.on(MEvent.name, (...args) => MEvent.run(this, this.Music, ...args));
+        };
+    };
+
+    /* Command Loader V3 (Slash command ony)*/
     private async importCommands(): Promise<void> {
-        const CommandFolder = readdirSync(resolve(__dirname, '..', 'commands'))
-        for (const folder of CommandFolder) {
-            const CommandFiles = readdirSync(resolve(__dirname, '..', 'commands', folder)).filter(file => file.endsWith('.ts'))
-            for (const file of CommandFiles) {
-                const command = ( await import(resolve(__dirname, '..', 'commands', folder, file)) ).default;
-                this.commands.set(command.name.toLowerCase() /* Fix command being uppercase and make you go insane */, command) // This creates a Map consisting the key and value.
-            }
-        } // Load default command ($cprefix...)
+        const CommandFiles = readdirSync(resolve(__dirname, '..', 'commands')).filter(files => files.endsWith('.ts'));
 
-        /* Load slash command */
-        const SlashCommandFolder = readdirSync(resolve(__dirname, '..', 'commandslashs')).filter(file => file.endsWith('.ts'));
-        SlashCommandFolder.map(async data => {
-            const SlashCommand = (await import(resolve(__dirname, '..', 'commandslashs', data))).default;
-            
-            if (!SlashCommand.name) return;
-            this.slashcommands.set(SlashCommand.name, SlashCommand);
+        CommandFiles.map(async data => {
+            const Command = (await import(resolve(__dirname, '..', 'commands', data))).default;
 
-            this.RegisterSlash.push(SlashCommand);
-        })
-    }
-
-    private async FileCheck(): Promise<void | number> { // Check if file exist else, create.
-        if (!existsSync(resolve(__dirname, '..', 'guild_prefix.json'))) return writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify({}, null, 0));
-        else return 0
-    }
-
-    /**
-     * Gets the prefix with the [id] provided 
-     * @param id - Guild id (discord.js Guild, .id)
-     * @returns {String} - Prefix.
-     */
-
-    public async getPrefix(id: string): Promise<string> {
-        const guild_prefix = require(resolve(__dirname, '..', 'guild_prefix.json'))
-        return guild_prefix[id]?.gprefix
-    }
-
-    /**
-     * Add prefix if guild doesn't exist withn the file
-     * @param id -  Guild id (discord.js Guild, .id)
-     * @param prefix - Sets the prefix of the guild to defined prefix
-     * @returns {File}
-     */
-
-    public async configPrefix(id: string, prefix: string): Promise<void> {
-        const guild_prefix = require(resolve(__dirname, '..', 'guild_prefix.json'))
-
-        if(!guild_prefix[id]) {
-            guild_prefix[id] = {
-                gprefix: prefix
-            }
-        }
-
-        return writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify(guild_prefix, null, 2))
-    }
-
-    /**
-     * Deletes guild info from file
-     * @param id - Guild id (discord.js Guild, .id)
-     * @returns {File} - Not exactly, this returns the edited file [Usable at anytime]
-     */
-    
-    public async deletePrefix(id: string): Promise<void> {
-        const guild_prefix = require(resolve(__dirname, '..',  'guild_prefix.json'));
-        delete(guild_prefix[id])
-        return  writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify(guild_prefix, null, 2))
-    }
-
-    /**
-     * Change Prefix from guild provided to file
-     * @param id - Guild id (discord.js Guild, .id)
-     * @param prefix - Guild Prefix To Set
-     * @returns {File}
-     */
-    public async chgPrefix(id: string, prefix: string): Promise<void> {
-        const guild_prefix = require(resolve(__dirname, '..', 'guild_prefix.json'))
-        if (guild_prefix[id]) {
-            this.deletePrefix(id)
-        }           
-        guild_prefix[id] =  {
-                gprefix: prefix
-            };
-        return writeFileSync(resolve(__dirname, '..', 'guild_prefix.json'), JSON.stringify(guild_prefix, null, 2));
-    }
+            if (!Command.name) return; // Skip if it doesn't have a name.
+            this.Commands.set(Command.name, Command); // Set command name.
+            this.CommandInfo.push(Command); // Push command for registering.
+        });
+    };
 
     public async connect(): Promise<string> {
-        await this.FileCheck(); // Check file #L65 ( This slows the starting speed but worth the wait )
-        await this.importEvents(); // Import Events from Client and Manager #L33
-        await this.importCommands(); // Load Commands #L51 ( Inclduing slash command )
-        return this.login(this.token) // Returns BaseClient ( Init Websocket connection with provided token )
-    }
-}
-
-export { Core }
+        await this.importEvents(); // Import event
+        await this.importCommands(); // Import command
+        return this.login(this.Token); // Start the bot
+    };
+};

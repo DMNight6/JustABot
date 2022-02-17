@@ -1,5 +1,3 @@
-import { ClientEvents } from 'discord.js';
-
 interface RunArgs {
     (
         client: import('../struct/Core').Core,
@@ -8,7 +6,7 @@ interface RunArgs {
 }
 
 export interface IEvent {
-    name: keyof ClientEvents;
+    name: keyof import('discord.js').ClientEvents;
     once: boolean;
     run: RunArgs;
 }

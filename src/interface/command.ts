@@ -1,5 +1,3 @@
-import { ApplicationCommandDataResolvable } from 'discord.js'
-
 interface RunArgs {
     (
         client: import('../struct/Core').Core,
@@ -7,4 +5,4 @@ interface RunArgs {
     ): Promise<any>
 }
 
-export type SlashCommandBuilder = ApplicationCommandDataResolvable & { run: RunArgs }
+export type ICommand = import('discord.js').ApplicationCommandDataResolvable & { run: RunArgs };

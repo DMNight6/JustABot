@@ -1,6 +1,5 @@
-# File to ignore
+# Personal Files
 node_modules
-data.ts
 .vscode
 .env
 Lavalink.jar

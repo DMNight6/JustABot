@@ -4,34 +4,28 @@
   "description": "Just a bot I code on stream",
   "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node ."
+    "start": "ts-node .",
+    "startLavalink": "concurrently -n bot,lavalink \"ts-node .\" \"ts-node ./src/scripts/Spawn.ts\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DMNight6/JustABot/tree/main-js"
+    "url": "git+https://github.com/DMNight6/JustABot.git#main-ts"
   },
   "author": "Midnight#3929",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/DMNight6/JustABot/issues"
   },
-  "homepage": "https://github.com/DMNight6/JustABot/tree/main-js#readme",
+  "homepage": "https://github.com/DMNight6/JustABot/tree/main-ts#readme",
   "dependencies": {
-    "@discordjs/rest": "^0.1.0-canary.0",
-    "axios": "^0.23.0",
-    "chokidar": "^3.5.2",
-    "discord-api-types": "^0.24.0",
-    "discord.js": "^13.5.0",
+    "axios": "^0.25.0",
+    "concurrently": "^7.0.0",
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0",
     "erela.js": "^2.3.3",
-    "erela.js-filter": "^0.2.3",
-    "mathjs": "^10.0.2",
-    "shelljs": "^0.8.4",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.4",
-    "winston": "^3.3.3",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5",
+    "winston": "^3.5.1",
     "yaml": "^1.10.2"
-  },
-  "devDependencies": {
-    "@types/shelljs": "^0.8.9"
   }
 }
