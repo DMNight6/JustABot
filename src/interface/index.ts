@@ -8,4 +8,5 @@ export { IManagerEvent } from './managerEvent';
 export { ConvertTime } from './Utils/ConvertTime';
 export { PlayerTimeout } from './Utils/PlayerTimeout';
 export { TimerConfiguration } from './Utils/TimerConfig';
+export { ProgressBar } from './Utils/ProgressBar';
 /* End of Utils */
